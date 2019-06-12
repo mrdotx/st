@@ -88,7 +88,7 @@ float alpha = 0.9;
 /* Terminal colors (16 first used in escape sequence) */
 static const char *colorname[] = {
 	/* 8 normal colors */
-    "#000000",  /* 0 -> black */
+	"#000000",  /* 0 -> black */
 	"#aa0000",  /* 1 -> red */
 	"#3476a4",  /* 2 -> green */
 	"#aa5500",  /* 3 -> yellow */
@@ -112,7 +112,7 @@ static const char *colorname[] = {
 	/* more colors can be added after 255 to use with DefaultXX */
 	"#000000",  /* 256 -> bg */
 	"#ffffff",  /* 257 -> fg */
-    "#4084d6",  /* 258 -> cursor */
+	"#4084d6",  /* 258 -> cursor */
 };
 
 
@@ -188,7 +188,7 @@ ResourcePref resources[] = {
 		{ "borderpx",     INTEGER, &borderpx },
 		{ "cwscale",      FLOAT,   &cwscale },
 		{ "chscale",      FLOAT,   &chscale },
-        { "alpha",        FLOAT,   &alpha },
+		{ "alpha",        FLOAT,   &alpha },
 };
 
 /*

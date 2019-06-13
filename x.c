@@ -161,8 +161,6 @@ static void xhints(void);
 static int xloadcolor(int, const char *, Color *);
 static int xloadfont(Font *, FcPattern *);
 static void xloadfonts(char *, double);
-static int xloadsparefont(FcPattern *, int);
-static void xloadsparefonts(void);
 static void xunloadfont(Font *);
 static void xunloadfonts(void);
 static void xsetenv(void);
@@ -240,9 +238,8 @@ typedef struct {
 } Fontcache;
 
 /* Fontcache is an array now. A new font will be appended to the array. */
-static Fontcache *frc = NULL;
+static Fontcache *frc[16];
 static int frclen = 0;
-static int frccap = 0;
 static char *usedfont = NULL;
 static double usedfontsize = 0;
 static double defaultfontsize = 0;
@@ -311,7 +308,6 @@ zoomabs(const Arg *arg)
 {
 	xunloadfonts();
 	xloadfonts(usedfont, arg->f);
-	xloadsparefonts();
 	cresize(0, 0);
 	redraw();
 	xhints();
@@ -1012,101 +1008,6 @@ xloadfonts(char *fontstr, double fontsize)
 	FcPatternDestroy(pattern);
 }
 
-int
-xloadsparefont(FcPattern *pattern, int flags)
-{
-	FcPattern *match;
-	FcResult result;
-	
-	match = FcFontMatch(NULL, pattern, &result);
-	if (!match) {
-		return 1;
-	}
-
-	if (!(frc[frclen].font = XftFontOpenPattern(xw.dpy, match))) {
-		FcPatternDestroy(match);
-		return 1;
-	}
-
-	frc[frclen].flags = flags;
-	/* Believe U+0000 glyph will present in each default font */
-	frc[frclen].unicodep = 0;
-	frclen++;
-
-	return 0;
-}
-
-void
-xloadsparefonts(void)
-{
-	FcPattern *pattern;
-	double sizeshift, fontval;
-	int fc;
-	char **fp;
-
-	if (frclen != 0)
-		die("can't embed spare fonts. cache isn't empty");
-
-	/* Calculate count of spare fonts */
-	fc = sizeof(font2) / sizeof(*font2);
-	if (fc == 0)
-		return;
-
-	/* Allocate memory for cache entries. */
-	if (frccap < 4 * fc) {
-		frccap += 4 * fc - frccap;
-		frc = xrealloc(frc, frccap * sizeof(Fontcache));
-	}
-
-	for (fp = font2; fp - font2 < fc; ++fp) {
-	
-		if (**fp == '-')
-			pattern = XftXlfdParse(*fp, False, False);
-		else
-			pattern = FcNameParse((FcChar8 *)*fp);
-	
-		if (!pattern)
-			die("can't open spare font %s\n", *fp);
-	   		
-		if (defaultfontsize > 0) {
-			sizeshift = usedfontsize - defaultfontsize;
-			if (sizeshift != 0 &&
-					FcPatternGetDouble(pattern, FC_PIXEL_SIZE, 0, &fontval) ==
-					FcResultMatch) {	
-				fontval += sizeshift;
-				FcPatternDel(pattern, FC_PIXEL_SIZE);
-				FcPatternDel(pattern, FC_SIZE);
-				FcPatternAddDouble(pattern, FC_PIXEL_SIZE, fontval);
-			}
-		}
-	
-		FcPatternAddBool(pattern, FC_SCALABLE, 1);
-	
-		FcConfigSubstitute(NULL, pattern, FcMatchPattern);
-		XftDefaultSubstitute(xw.dpy, xw.scr, pattern);
-	
-		if (xloadsparefont(pattern, FRC_NORMAL))
-			die("can't open spare font %s\n", *fp);
-	
-		FcPatternDel(pattern, FC_SLANT);
-		FcPatternAddInteger(pattern, FC_SLANT, FC_SLANT_ITALIC);
-		if (xloadsparefont(pattern, FRC_ITALIC))
-			die("can't open spare font %s\n", *fp);
-			
-		FcPatternDel(pattern, FC_WEIGHT);
-		FcPatternAddInteger(pattern, FC_WEIGHT, FC_WEIGHT_BOLD);
-		if (xloadsparefont(pattern, FRC_ITALICBOLD))
-			die("can't open spare font %s\n", *fp);
-	
-		FcPatternDel(pattern, FC_SLANT);
-		FcPatternAddInteger(pattern, FC_SLANT, FC_SLANT_ROMAN);
-		if (xloadsparefont(pattern, FRC_BOLD))
-			die("can't open spare font %s\n", *fp);
-	
-		FcPatternDestroy(pattern);
-	}
-}
-
 void
 xunloadfont(Font *f)
 {
@@ -1159,9 +1060,6 @@ xinit(int cols, int rows)
 
 	usedfont = (opt_font == NULL)? font : opt_font;
 	xloadfonts(usedfont, 0);
-
-	/* spare fonts */
-	xloadsparefonts();
 
 	/* colors */
 	xw.cmap = XCreateColormap(xw.dpy, parent, xw.vis, None);
@@ -1361,11 +1259,12 @@ xmakeglyphfontspecs(XftGlyphFontSpec *specs, const Glyph *glyphs, int len, int x
 					fcpattern, &fcres);
 
 			/*
-			 * Allocate memory for the new cache entry
+			 * Overwrite or create the new cache entry.
 			 */
-			if (frclen >= frccap) {
-                frccap += 16;
-                frc = xrealloc(frc, frccap * sizeof(Fontcache));
+			if (frclen >= LEN(frc)) {
+				frclen = LEN(frc) - 1;
+				XftFontClose(xw.dpy, frc[frclen].font);
+				frc[frclen].unicodep = 0;
 			}
 
 			frc[frclen].font = XftFontOpenPattern(xw.dpy,

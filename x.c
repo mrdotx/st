@@ -240,7 +240,7 @@ typedef struct {
 } Fontcache;
 
 /* Fontcache is an array now. A new font will be appended to the array. */
-static Fontcache frc[16];
+static Fontcache *frc = NULL;
 static int frclen = 0;
 static int frccap = 0;
 static char *usedfont = NULL;

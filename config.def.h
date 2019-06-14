@@ -5,11 +5,7 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "DejaVu Sans Mono:pixelsize=16:antialias=true:autohint=true";
-/* Spare fonts */
-static char *font2[] = {
-	"PowerlineSymbols:pixelsize=16:antialias=true:autohint=true",
-};
+static char *font = "DejaVuSansMono Nerd Font Mono:pixelsize=16:antialias=true:autohint=true";
 static int borderpx = 2;
 
 /*
@@ -163,7 +159,6 @@ static unsigned int defaultattr = 11;
  */
 ResourcePref resources[] = {
 		{ "font",         STRING,  &font },
-        { "fontsymbols",  STRING,  &font2 },
 		{ "color0",       STRING,  &colorname[0] },
 		{ "color1",       STRING,  &colorname[1] },
 		{ "color2",       STRING,  &colorname[2] },

@@ -1364,7 +1364,7 @@ xmakeglyphfontspecs(XftGlyphFontSpec *specs, const Glyph *glyphs, int len, int x
 			 * Allocate memory for the new cache entry
 			 */
 			if (frclen >= frccap) {
-				frc = xfrccap += 16;
+				frccap += 16;
 				frc = xrealloc(frc, frccap * sizeof(Fontcache));
 			}
 

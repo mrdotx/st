@@ -1,10 +1,10 @@
 #!/bin/sh
 # vim:fileencoding=utf-8:ft=sh:foldmethod=marker
 
-# path:       ~/coding/st/copycmdout
+# path:       ~/coding/st/copycmdout.sh
 # user:       klassiker [mrdotx]
 # github:     https://github.com/mrdotx/st
-# date:       2019-11-26 16:59:49
+# date:       2019-11-26 21:29:58
 
 tmpfile=$(mktemp /tmp/st-cmd-output.XXXXXX)
 trap 'rm "$tmpfile"' 0 1 15
@@ -12,4 +12,4 @@ sed -n "w $tmpfile"
 ps1="$(grep "\S" "$tmpfile" | tail -n 1 | sed 's/^\s*//' | cut -d' ' -f1)"
 chosen="$(grep -F "$ps1" "$tmpfile" | sed '$ d' | tac | rofi -monitor -2 -theme klassiker-vertical -dmenu -i -p "Copy which command's output?" -l 5 | sed 's/[^^]/[&]/g; s/\^/\\^/g')"
 eps1="$(echo "$ps1" | sed 's/[^^]/[&]/g; s/\^/\\^/g')"
-awk "/^$chosen$/{p=1;print;next} p&&/$eps1/{p=0};p" "$tmpfile" | xclip -selection clipboard
+awk "/^$chosen$/{p=1;print;next} p&&/$eps1/{p=0};p" "$tmpfile" | xclip -selection clipboard && notify-send -i "$HOME/coding/st/icons/terminal.png" "$TERMINAL" "Command output copied to clipboard"

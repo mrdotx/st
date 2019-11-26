@@ -49,6 +49,6 @@ Key - Bindings
 --------------
 Zoom            - ctrl + plus, minus, equel
 Scollback       - shift + page_up, page_down (mouse scroll)
-External Pipe   - alt + l (open url from Rofi)
-                  alt + y (copy url to xclip)
-                  alt + o (copy command output to xclip)
+External Pipe   - alt + l (select url with rofi to open in browser)
+                  alt + y (select url with rofi to copy to xclip)
+                  alt + o (select command with rofi to copy output to xclip)

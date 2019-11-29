@@ -52,3 +52,7 @@ Scollback       - shift + page_up, page_down (mouse scroll)
 External Pipe   - alt + l (select url with rofi to open in browser)
                   alt + y (select url with rofi to copy to xclip)
                   alt + o (select command with rofi to copy output to xclip)
+
+Last implemented commit
+-----------------------
+2019-11-17 19:04    update FAQ  Hiltjo Posthuma

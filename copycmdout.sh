@@ -1,10 +1,9 @@
 #!/bin/sh
-# vim:fileencoding=utf-8:ft=sh:foldmethod=marker
 
 # path:       ~/coding/st/copycmdout.sh
 # user:       klassiker [mrdotx]
 # github:     https://github.com/mrdotx/st
-# date:       2019-11-26 21:29:58
+# date:       2019-12-01 12:07:29
 
 tmpfile=$(mktemp /tmp/st-cmd-output.XXXXXX)
 trap 'rm "$tmpfile"' 0 1 15

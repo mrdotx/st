@@ -33,7 +33,7 @@ typedef struct {
  	uint mod;
 	uint button;
 	void (*func)(const Arg *);
-	const Arg arg;   
+	const Arg arg;
     uint  release;
 } MouseShortcut;
 

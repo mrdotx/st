@@ -3,7 +3,7 @@
 # path:       ~/projects/st/copycmdout.sh
 # user:       klassiker [mrdotx]
 # github:     https://github.com/mrdotx/st
-# date:       2019-12-21 15:03:42
+# date:       2020-01-13T12:10:43+0100
 
 tmpfile=$(mktemp /tmp/st-cmd-output.XXXXXX)
 trap 'rm "$tmpfile"' 0 1 15

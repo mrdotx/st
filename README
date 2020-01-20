@@ -56,4 +56,4 @@ External Pipe   - alt + l (select url with rofi to open in browser)
 
 Last implemented commit
 -----------------------
-2019-11-17 19:04    update FAQ  Hiltjo Posthuma
+2020-01-18 07:52	Increase XmbLookupString buffer	Ivan Tham

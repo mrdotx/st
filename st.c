@@ -1082,6 +1082,7 @@ void
 kscrollup(const Arg* a)
 {
 	int n = a->i;
+
 	if (n < 0)
 		n = term.row + n;
 
@@ -1116,7 +1117,8 @@ tscrolldown(int orig, int n, int copyhist)
 		term.line[i-n] = temp;
 	}
 
-	selscroll(orig, n);
+	if (term.scr == 0)
+		selscroll(orig, n);
 }
 
 void
@@ -1146,7 +1148,8 @@ tscrollup(int orig, int n, int copyhist)
 		term.line[i+n] = temp;
 	}
 
-	selscroll(orig, -n);
+	if (term.scr == 0)
+		selscroll(orig, -n);
 }
 
 void

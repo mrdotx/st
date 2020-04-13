@@ -58,4 +58,4 @@ External Pipe   - alt + l (select url with rofi to open in browser)
 
 Last implemented commit
 -----------------------
-2020-02-18 15:28	Remove explicit XNFocusWindow	Ivan Tham
+2020-04-10 10:12	make argv0 not static, fixes a warning with tcc	Hiltjo Posthuma

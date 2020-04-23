@@ -1,9 +1,9 @@
 #!/bin/sh
 
-# path:       ~/.local/share/repos/st/copycmdout.sh
+# path:       ~/.local/share/repos/st/copycmd.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/st
-# date:       2020-04-23T10:38:38+0200
+# date:       2020-04-23T17:06:40+0200
 
 tmpfile=$(mktemp /tmp/st-cmd-output.XXXXXX)
 trap 'rm "$tmpfile"' 0 1 15

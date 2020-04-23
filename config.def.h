@@ -228,9 +228,9 @@ MouseKey mkeys[] = {
     { Button5,              TERMMOD,        zoom,           {.f =  -1} },
 };
 
-static char *openurlcmd[] = { "/bin/sh", "-c", "openurlcmd.sh", "externalpipe", NULL };
-static char *copyurlcmd[] = { "/bin/sh", "-c", "copyurlcmd.sh", "externalpipe", NULL };
-static char *copycmdout[] = { "/bin/sh", "-c", "copycmdout.sh", "externalpipe", NULL };
+static char *openurl[] = { "/bin/sh", "-c", "openurl.sh", "externalpipe", NULL };
+static char *copyurl[] = { "/bin/sh", "-c", "copyurl.sh", "externalpipe", NULL };
+static char *copycmd[] = { "/bin/sh", "-c", "copycmd.sh", "externalpipe", NULL };
 
 static Shortcut shortcuts[] = {
     /* mask                 keysym          function        argument */
@@ -248,9 +248,9 @@ static Shortcut shortcuts[] = {
     { TERMMOD,              XK_Num_Lock,    numlock,        {.i =  0} },
     { ShiftMask,            XK_Page_Up,     kscrollup,      {.i = -1} },
     { ShiftMask,            XK_Page_Down,   kscrolldown,    {.i = -1} },
-    { MODKEY,               XK_l,           externalpipe,   {.v = openurlcmd } },
-    { MODKEY,               XK_y,           externalpipe,   {.v = copyurlcmd } },
-    { MODKEY,               XK_o,           externalpipe,   {.v = copycmdout } },
+    { MODKEY,               XK_l,           externalpipe,   {.v = openurl } },
+    { MODKEY,               XK_y,           externalpipe,   {.v = copyurl } },
+    { MODKEY,               XK_o,           externalpipe,   {.v = copycmd } },
 };
 
 /*

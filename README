@@ -48,6 +48,7 @@ st-alpha-0.8.2.diff
 st-xresources-20190105-3be4cf1.diff
 st-font2-20190416-ba72400.diff
 st-externalpipe-0.8.2.diff
+st-invert-0.8.2.diff
 
 Key - Bindings
 --------------
@@ -56,6 +57,7 @@ Scollback       - shift + page_up, page_down (mouse scroll)
 External Pipe   - alt + l (select url with rofi to open in browser)
                   alt + y (select url with rofi to copy to xsel)
                   alt + o (select command with rofi to copy output to xsel)
+Invert          - alt + i
 
 Last implemented commit
 -----------------------

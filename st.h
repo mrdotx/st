@@ -74,14 +74,14 @@ typedef union {
 	uint ui;
 	float f;
 	const void *v;
-    const char *s;
+	const char *s;
 } Arg;
 
 typedef struct {
-	 uint b;
-	 uint mask;
-	 void (*func)(const Arg *);
-	 const Arg arg;
+	uint b;
+	uint mask;
+	void (*func)(const Arg *);
+	const Arg arg;
 } MouseKey;
 
 void die(const char *, ...);
@@ -124,6 +124,7 @@ char *xstrdup(char *);
 
 /* config.h globals */
 extern char *utmp;
+extern char *scroll;
 extern char *stty_args;
 extern char *vtiden;
 extern wchar_t *worddelimiters;

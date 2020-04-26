@@ -58,4 +58,4 @@ External Pipe   - alt + l (select url with rofi to open in browser)
 
 Last implemented commit
 -----------------------
-2020-04-10 10:12	make argv0 not static, fixes a warning with tcc	Hiltjo Posthuma
+2020-04-19 17:38	Update XIM cursor position only if changed	Ivan Tham

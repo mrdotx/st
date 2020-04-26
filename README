@@ -36,16 +36,17 @@ Version
 -------
 0.8.2
 
+Scroll
+------
+suckless scrollbackbuffer program for st implemented
+    https://git.suckless.org/scroll/
+
 Patches
 -------
 st-anysize-0.8.1.diff
 st-alpha-0.8.2.diff
 st-xresources-20190105-3be4cf1.diff
 st-font2-20190416-ba72400.diff
-st-scrollback-20200504-28ad288.diff
-st-scrollback-20190331-21367a0.diff
-st-scrollback-mouse-20191024-a2c479c.diff
-st-scrollback-mouse-altscreen-20191024-a2c479c.diff
 st-externalpipe-0.8.2.diff
 
 Key - Bindings

@@ -30,12 +30,11 @@ typedef struct {
 } Shortcut;
 
 typedef struct {
- 	uint mod;
+	uint mod;
 	uint button;
 	void (*func)(const Arg *);
 	const Arg arg;
-    uint  release;
-	int  altscrn;  /* 0: don't care,  -1: not alt screen,  1: alt screen */
+	uint  release;
 } MouseShortcut;
 
 typedef struct {
@@ -326,6 +325,7 @@ zoomabs(const Arg *arg)
 {
 	xunloadfonts();
 	xloadfonts(usedfont, arg->f);
+	xloadsparefonts();
 	cresize(0, 0);
 	redraw();
 	xhints();
@@ -368,7 +368,7 @@ void
 mousesel(XEvent *e, int done)
 {
 	int type, seltype = SEL_REGULAR;
-    uint state = e->xbutton.state & ~(Button1Mask | forcemousemod);
+	uint state = e->xbutton.state & ~(Button1Mask | forcemousemod);
 
 	for (type = 1; type < LEN(selmasks); ++type) {
 		if (match(selmasks[type], state)) {
@@ -466,7 +466,6 @@ mouseaction(XEvent *e, uint release)
 	for (ms = mshortcuts; ms < mshortcuts + LEN(mshortcuts); ms++) {
 		if (ms->release == release &&
 		    ms->button == e->xbutton.button &&
-		    (!ms->altscrn || (ms->altscrn == (tisaltscr() ? 1 : -1))) &&
 		    (match(ms->mod, state) ||  /* exact or forced */
 		     match(ms->mod, state & ~forcemousemod))) {
 			ms->func(&(ms->arg));
@@ -481,26 +480,15 @@ void
 bpress(XEvent *e)
 {
 	struct timespec now;
-	MouseKey *mk;
 	int snap;
 
-    if (IS_SET(MODE_MOUSE) && !(e->xbutton.state & forcemousemod)) {
+	if (IS_SET(MODE_MOUSE) && !(e->xbutton.state & forcemousemod)) {
 		mousereport(e);
 		return;
 	}
 
-	if (tisaltscr()) {
-	    if (mouseaction(e, 0))
-		    return;
-	}
-
-	for (mk = mkeys; mk < mkeys + LEN(mkeys); mk++) {
-		if (e->xbutton.button == mk->b
-				&& match(mk->mask, e->xbutton.state)) {
-			mk->func(&mk->arg);
-			return;
-		}
-	}
+	if (mouseaction(e, 0))
+		return;
 
 	if (e->xbutton.button == Button1) {
 		/*
@@ -716,7 +704,7 @@ xsetsel(char *str)
 void
 brelease(XEvent *e)
 {
-    if (IS_SET(MODE_MOUSE) && !(e->xbutton.state & forcemousemod)) {
+	if (IS_SET(MODE_MOUSE) && !(e->xbutton.state & forcemousemod)) {
 		mousereport(e);
 		return;
 	}
@@ -730,7 +718,7 @@ brelease(XEvent *e)
 void
 bmotion(XEvent *e)
 {
-    if (IS_SET(MODE_MOUSE) && !(e->xbutton.state & forcemousemod)) {
+	if (IS_SET(MODE_MOUSE) && !(e->xbutton.state & forcemousemod)) {
 		mousereport(e);
 		return;
 	}
@@ -1219,6 +1207,7 @@ ximinstantiate(Display *dpy, XPointer client, XPointer call)
 void
 ximdestroy(XIM xim, XPointer client, XPointer call)
 {
+	xw.ime.xim = NULL;
 	XRegisterIMInstantiateCallback(xw.dpy, NULL, NULL, NULL,
 	                               ximinstantiate, NULL);
 	XFree(xw.ime.spotlist);
@@ -1310,7 +1299,7 @@ xinit(int cols, int rows)
 	                                       ximinstantiate, NULL);
 	}
 
-    /* white cursor, black outline */
+	/* white cursor, black outline */
 	cursor = XCreateFontCursor(xw.dpy, mouseshape);
 	XDefineCursor(xw.dpy, xw.win, cursor);
 
@@ -1450,10 +1439,10 @@ xmakeglyphfontspecs(XftGlyphFontSpec *specs, const Glyph *glyphs, int len, int x
 			fontpattern = FcFontSetMatch(0, fcsets, 1,
 					fcpattern, &fcres);
 
-            /* Allocate memory for the new cache entry. */
+			/* Allocate memory for the new cache entry. */
 			if (frclen >= frccap) {
 				frccap += 16;
-                frc = xrealloc(frc, frccap * sizeof(Fontcache));
+				frc = xrealloc(frc, frccap * sizeof(Fontcache));
 			}
 
 			frc[frclen].font = XftFontOpenPattern(xw.dpy,

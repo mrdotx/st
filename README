@@ -61,4 +61,4 @@ Invert          - alt + i
 
 Last implemented commit
 -----------------------
-2020-04-19 17:38	Update XIM cursor position only if changed	Ivan Tham
+2020-04-27 11:56	bump version to 0.8.3	Hiltjo Posthuma

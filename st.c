@@ -201,6 +201,8 @@ static void tdefutf8(char);
 static int32_t tdefcolor(int *, int *, int);
 static void tdeftran(char);
 static void tstrsequence(uchar);
+static void tsetcolor(int, int, int, uint32_t, uint32_t);
+static char * findlastany(char *, const char**, size_t);
 
 static void drawregion(int, int, int, int);
 
@@ -1933,59 +1935,6 @@ strparse(void)
 }
 
 void
-externalpipe(const Arg *arg)
-{
-	int to[2];
-	char buf[UTF_SIZ];
-	void (*oldsigpipe)(int);
-	Glyph *bp, *end;
-	int lastpos, n, newline;
-
-	if (pipe(to) == -1)
-		return;
-
-	switch (fork()) {
-	case -1:
-		close(to[0]);
-		close(to[1]);
-		return;
-	case 0:
-		dup2(to[0], STDIN_FILENO);
-		close(to[0]);
-		close(to[1]);
-		execvp(((char **)arg->v)[0], (char **)arg->v);
-		fprintf(stderr, "st: execvp %s\n", ((char **)arg->v)[0]);
-		perror("failed");
-		exit(0);
-	}
-
-	close(to[0]);
-	/* ignore sigpipe for now, in case child exists early */
-	oldsigpipe = signal(SIGPIPE, SIG_IGN);
-	newline = 0;
-	for (n = 0; n < term.row; n++) {
-		bp = term.line[n];
-		lastpos = MIN(tlinelen(n) + 1, term.col) - 1;
-		if (lastpos < 0)
-			break;
-		end = &bp[lastpos + 1];
-		for (; bp < end; ++bp)
-			if (xwrite(to[1], buf, utf8encode(bp->u, buf)) < 0)
-				break;
-		if ((newline = term.line[n][lastpos].mode & ATTR_WRAP))
-			continue;
-		if (xwrite(to[1], "\n", 1) < 0)
-			break;
-		newline = 0;
-	}
-	if (newline)
-		(void)xwrite(to[1], "\n", 1);
-	close(to[1]);
-	/* restore */
-	signal(SIGPIPE, oldsigpipe);
-}
-
-void
 strdump(void)
 {
 	size_t i;
@@ -2665,4 +2614,126 @@ redraw(void)
 {
 	tfulldirt();
 	draw();
+}
+
+void
+tsetcolor( int row, int start, int end, uint32_t fg, uint32_t bg )
+{
+	int i = start;
+	for( ; i < end; ++i )
+	{
+		term.line[row][i].fg = fg;
+		term.line[row][i].bg = bg;
+	}
+}
+
+char *
+findlastany(char *str, const char** find, size_t len)
+{
+	char* found = NULL;
+	int i = 0;
+	for(found = str + strlen(str) - 1; found >= str; --found) {
+		for(i = 0; i < len; i++) {
+			if(strncmp(found, find[i], strlen(find[i])) == 0) {
+				return found;
+			}
+		}
+	}
+
+	return NULL;
+}
+
+/*
+** Select and copy the previous url on screen (do nothing if there's no url).
+**
+** FIXME: doesn't handle urls that span multiple lines; will need to add support
+**        for multiline "getsel()" first
+*/
+void
+copyurl(const Arg *arg) {
+	/* () and [] can appear in urls, but excluding them here will reduce false
+	 * positives when figuring out where a given url ends.
+	 */
+	static char URLCHARS[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+		"abcdefghijklmnopqrstuvwxyz"
+		"0123456789-._~:/?#@!$&'*+,;=%";
+
+	static const char* URLSTRINGS[] = {"http://", "https://"};
+
+	/* remove highlighting from previous selection if any */
+	if(sel.ob.x >= 0 && sel.oe.x >= 0)
+		tsetcolor(sel.nb.y, sel.ob.x, sel.oe.x + 1, defaultfg, defaultbg);
+
+	int i = 0,
+		row = 0, /* row of current URL */
+		col = 0, /* column of current URL start */
+		startrow = 0, /* row of last occurrence */
+		colend = 0, /* column of last occurrence */
+		passes = 0; /* how many rows have been scanned */
+
+	char *linestr = calloc(sizeof(char), term.col+1); /* assume ascii */
+	char *c = NULL,
+		 *match = NULL;
+
+	row = (sel.ob.x >= 0 && sel.nb.y > 0) ? sel.nb.y : term.bot;
+	LIMIT(row, term.top, term.bot);
+	startrow = row;
+
+	colend = (sel.ob.x >= 0 && sel.nb.y > 0) ? sel.nb.x : term.col;
+	LIMIT(colend, 0, term.col);
+
+	/*
+ 	** Scan from (term.bot,term.col) to (0,0) and find
+	** next occurrance of a URL
+	*/
+	while(passes !=term.bot + 2) {
+		/* Read in each column of every row until
+ 		** we hit previous occurrence of URL
+		*/
+		for (col = 0, i = 0; col < colend; ++col,++i) {
+			/* assume ascii */
+			if (term.line[row][col].u > 127)
+				continue;
+			linestr[i] = term.line[row][col].u;
+		}
+		linestr[term.col] = '\0';
+
+		if ((match = findlastany(linestr, URLSTRINGS,
+						sizeof(URLSTRINGS)/sizeof(URLSTRINGS[0]))))
+			break;
+
+		if (--row < term.top)
+			row = term.bot;
+
+		colend = term.col;
+		passes++;
+	};
+
+	if (match) {
+		/* must happen before trim */
+		selclear();
+		sel.ob.x = strlen(linestr) - strlen(match);
+
+		/* trim the rest of the line from the url match */
+		for (c = match; *c != '\0'; ++c)
+			if (!strchr(URLCHARS, *c)) {
+				*c = '\0';
+				break;
+			}
+
+		/* highlight selection by inverting terminal colors */
+		tsetcolor(row, sel.ob.x, sel.ob.x + strlen( match ), defaultbg, defaultfg);
+
+		/* select and copy */
+		sel.mode = 1;
+		sel.type = SEL_REGULAR;
+		sel.oe.x = sel.ob.x + strlen(match)-1;
+		sel.ob.y = sel.oe.y = row;
+		selnormalize();
+		tsetdirt(sel.nb.y, sel.ne.y);
+		xsetsel(getsel());
+		xclipcopy();
+	}
+
+	free(linestr);
 }

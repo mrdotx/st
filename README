@@ -63,4 +63,4 @@ Invert Colors   - alt + i
 
 Last implemented commit
 -----------------------
-2020-04-27 11:56	bump version to 0.8.3	Hiltjo Posthuma
+2020-04-29 22:10	replace exit(3) by _exit(2) in signal handler sigchld()	Jan Klemkow

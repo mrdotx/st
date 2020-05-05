@@ -24,7 +24,7 @@ static int borderpx = 2;
 static char *shell = "/bin/sh";
 char *utmp = NULL;
 /* scroll program: to enable use a string like "scroll" */
-char *scroll = "scroll";
+char *scroll = NULL;
 char *stty_args = "stty raw pass8 nl -echo -iexten -cstopb 38400";
 
 /* identification sequence returned in DA and DECID */
@@ -192,6 +192,7 @@ ResourcePref resources[] = {
 		{ "cursorColor",  STRING,  &colorname[258] },
 		{ "termname",     STRING,  &termname },
 		{ "shell",        STRING,  &shell },
+		{ "scroll",       STRING,  &scroll },
 		{ "blinktimeout", INTEGER, &blinktimeout },
 		{ "bellvolume",   INTEGER, &bellvolume },
 		{ "tabspaces",    INTEGER, &tabspaces },

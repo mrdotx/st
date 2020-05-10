@@ -62,4 +62,4 @@ Invert Colors   - alt + i
 
 Last implemented commit
 -----------------------
-2020-04-29 22:10	replace exit(3) by _exit(2) in signal handler sigchld()	Jan Klemkow
+2020-05-09 12:43	code-style: add fallthrough comment	Hiltjo Posthuma

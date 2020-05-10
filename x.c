@@ -1681,6 +1681,7 @@ xdrawcursor(int cx, int cy, Glyph g, int ox, int oy, Glyph og)
 		switch (win.cursor) {
 		case 7: /* st extension: snowman (U+2603) */
 			g.u = 0x2603;
+			/* FALLTHROUGH */
 		case 0: /* Blinking Block */
 		case 1: /* Blinking Block (Default) */
 		case 2: /* Steady Block */
@@ -2084,7 +2085,7 @@ run(void)
 		 * triggers drawing, we first wait a bit to ensure we got
 		 * everything, and if nothing new arrives - we draw.
 		 * We start with trying to wait minlatency ms. If more content
-		 * arrives sooner, we retry with shorter and shorter preiods,
+		 * arrives sooner, we retry with shorter and shorter periods,
 		 * and eventually draw even without idle after maxlatency ms.
 		 * Typically this results in low latency while interacting,
 		 * maximum latency intervals during `cat huge.txt`, and perfect

@@ -62,4 +62,4 @@ Invert Colors   - alt + i
 
 Last implemented commit
 -----------------------
-2020-05-09 12:43	code-style: add fallthrough comment	Hiltjo Posthuma
+2020-05-06 11:36	Fix selection: selscroll	Jakub Leszczak

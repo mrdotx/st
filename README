@@ -62,4 +62,4 @@ Invert Colors   - alt + i
 
 Last implemented commit
 -----------------------
-2020-05-16 16:06	Revert "support REP (repeat) escape sequence"	Hiltjo Posthuma
+2020-05-21 02:24	Call xsetcursor to set win.cursor in main	Steve Ward

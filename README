@@ -62,4 +62,4 @@ Invert Colors   - alt + i
 
 Last implemented commit
 -----------------------
-2020-05-21 02:24	Call xsetcursor to set win.cursor in main	Steve Ward
+2020-05-30 19:56	config.def.h: add an option allowwindowops, by default off (secure)	Hiltjo Posthuma

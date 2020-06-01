@@ -44,7 +44,6 @@ suckless scrollbackbuffer program for st implemented
 Patches
 -------
 st-anysize-0.8.1.diff
-st-alpha-0.8.2.diff
 st-font2-20190416-ba72400.diff
 st-copyurl-20190202-3be4cf1.diff
 st-openclipboard-20190202-3be4cf1.diff

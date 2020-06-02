@@ -40,10 +40,6 @@ Scroll
 ------
 suckless scrollbackbuffer program for st implemented (disabled)
     https://git.suckless.org/scroll/
-temporary go back to scrollback patches
-    st-scrollback-20200419-72e3f6c.diff
-    st-scrollback-mouse-20191024-a2c479c.diff
-    st-scrollback-mouse-altscreen-20200416-5703aa0.diff
 
 Patches
 -------

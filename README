@@ -38,8 +38,12 @@ Version
 
 Scroll
 ------
-suckless scrollbackbuffer program for st implemented
+suckless scrollbackbuffer program for st implemented (disabled)
     https://git.suckless.org/scroll/
+temporary go back to scrollback patches
+    st-scrollback-20200419-72e3f6c.diff
+    st-scrollback-mouse-20191024-a2c479c.diff
+    st-scrollback-mouse-altscreen-20200416-5703aa0.diff
 
 Patches
 -------
@@ -50,6 +54,7 @@ st-openclipboard-20190202-3be4cf1.diff
 st-invert-0.8.2.diff
 st-appsync-0.8.3.diff
 st-xresources-20190105-3be4cf1.diff
+
 
 Key - Bindings
 --------------

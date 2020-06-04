@@ -63,4 +63,4 @@ Invert Colors   - alt + i
 
 Last implemented commit
 -----------------------
-2020-05-30 19:56	config.def.h: add an option allowwindowops, by default off (secure)	Hiltjo Posthuma
+2020-06-01 12:09	FAQ: fix single-buffer patch	Hiltjo Posthuma

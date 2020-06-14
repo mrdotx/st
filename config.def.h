@@ -5,7 +5,7 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "DejaVu Sans Mono:pixelsize=12:antialias=true:autohint=true";
+static char *font = "DejaVuSansMono Nerd Font:pixelsize=12:antialias=true:autohint=true";
 /* Spare fonts */
 static char *font2[] = { "JoyPixels:pixelsize=10:antialias=true:autohint=true" };
 
@@ -159,7 +159,7 @@ static unsigned int cursorshape = 2;
  */
 ResourcePref resources[] = {
 		{ "font",         STRING,  &font },
-		{ "fontalt",      STRING,  &font2[0] },
+		{ "fontemoji",    STRING,  &font2[0] },
 		{ "color0",       STRING,  &colorname[0] },
 		{ "color1",       STRING,  &colorname[1] },
 		{ "color2",       STRING,  &colorname[2] },

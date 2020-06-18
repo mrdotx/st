@@ -49,7 +49,7 @@ st-font2-20190416-ba72400.diff
 st-copyurl-20190202-3be4cf1.diff
 st-openclipboard-20190202-3be4cf1.diff
 st-invert-0.8.2.diff
-st-appsync-0.8.3.diff
+st-appsync-20200618-b27a383.diff
 st-xresources-20200604-9ba7ecf.diff
 
 Key - Bindings
@@ -62,4 +62,4 @@ Invert Colors   - alt + i
 
 Last implemented commit
 -----------------------
-2020-06-01 12:09	FAQ: fix single-buffer patch	Hiltjo Posthuma
+2020-06-17 21:47	config.mk: use PKG_CONFIG in commented OpenBSD section	Hiltjo Posthuma

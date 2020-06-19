@@ -1,6 +1,6 @@
 From 8c9c920325fa10440a96736ba58ec647a0365e22 Mon Sep 17 00:00:00 2001
 From: "Avi Halachmi (:avih)" <avihpit@yahoo.com>
-Date:       2020-06-18T16:46:20+0200
+Date: Sat, 18 Apr 2020 13:56:11 +0300
 Subject: [PATCH] application-sync: support Synchronized-Updates
 
 See https://gitlab.com/gnachman/iterm2/-/wikis/synchronized-updates-spec
@@ -61,7 +61,7 @@ index 6f05dce..80d768e 100644
 @@ -56,6 +56,12 @@ int allowwindowops = 0;
  static double minlatency = 8;
  static double maxlatency = 33;
-
+ 
 +/*
 + * Synchronized-Update timeout in ms
 + * https://gitlab.com/gnachman/iterm2/-/wikis/synchronized-updates-spec
@@ -78,7 +78,7 @@ index 76b7e0d..0582e77 100644
 @@ -231,6 +231,33 @@ static uchar utfmask[UTF_SIZ + 1] = {0xC0, 0x80, 0xE0, 0xF0, 0xF8};
  static Rune utfmin[UTF_SIZ + 1] = {       0,    0,  0x80,  0x800,  0x10000};
  static Rune utfmax[UTF_SIZ + 1] = {0x10FFFF, 0x7F, 0x7FF, 0xFFFF, 0x10FFFF};
-
+ 
 +#include <time.h>
 +static int su = 0;
 +struct timespec sutv;
@@ -112,7 +112,7 @@ index 76b7e0d..0582e77 100644
 @@ -818,6 +845,9 @@ ttynew(char *line, char *cmd, char *out, char **args)
  	return cmdfd;
  }
-
+ 
 +static int twrite_aborted = 0;
 +int ttyread_pending() { return twrite_aborted; }
 +
@@ -121,11 +121,11 @@ index 76b7e0d..0582e77 100644
  {
 @@ -826,7 +856,7 @@ ttyread(void)
  	int ret, written;
-
+ 
  	/* append read bytes to unprocessed bytes */
 -	ret = read(cmdfd, buf+buflen, LEN(buf)-buflen);
 +	ret = twrite_aborted ? 1 : read(cmdfd, buf+buflen, LEN(buf)-buflen);
-
+ 
  	switch (ret) {
  	case 0:
 @@ -834,7 +864,7 @@ ttyread(void)
@@ -144,7 +144,7 @@ index 76b7e0d..0582e77 100644
 +	tsync_end();
  	tsetdirt(0, term.row-1);
  }
-
+ 
 @@ -1895,6 +1926,12 @@ strhandle(void)
  		xsettitle(strescseq.args[0]);
  		return;
@@ -161,7 +161,7 @@ index 76b7e0d..0582e77 100644
 @@ -2436,6 +2473,9 @@ twrite(const char *buf, int buflen, int show_ctrl)
  	Rune u;
  	int n;
-
+ 
 +	int su0 = su;
 +	twrite_aborted = 0;
 +
@@ -188,7 +188,7 @@ index 8201ad6..b32b446 100644
  	Se=\E[2 q,
  	Ss=\E[%p1%d q,
 +	Sync=\EP=%p1%ds\E\\,
-
+ 
  st| simpleterm,
  	use=st-mono,
 diff --git a/x.c b/x.c
@@ -198,7 +198,7 @@ index 210f184..27ff4e2 100644
 @@ -1861,6 +1861,9 @@ resize(XEvent *e)
  	cresize(e->xconfigure.width, e->xconfigure.height);
  }
-
+ 
 +int tinsync(uint);
 +int ttyread_pending();
 +
@@ -208,21 +208,21 @@ index 210f184..27ff4e2 100644
 @@ -1895,7 +1898,7 @@ run(void)
  		FD_SET(ttyfd, &rfd);
  		FD_SET(xfd, &rfd);
-
+ 
 -		if (XPending(xw.dpy))
 +		if (XPending(xw.dpy) || ttyread_pending())
  			timeout = 0;  /* existing events might not set xfd */
-
+ 
  		seltv.tv_sec = timeout / 1E3;
 @@ -1909,7 +1912,8 @@ run(void)
  		}
  		clock_gettime(CLOCK_MONOTONIC, &now);
-
+ 
 -		if (FD_ISSET(ttyfd, &rfd))
 +		int ttyin = FD_ISSET(ttyfd, &rfd) || ttyread_pending();
 +		if (ttyin)
  			ttyread();
-
+ 
  		xev = 0;
 @@ -1933,7 +1937,7 @@ run(void)
  		 * maximum latency intervals during `cat huge.txt`, and perfect
@@ -236,7 +236,7 @@ index 210f184..27ff4e2 100644
 @@ -1944,6 +1948,18 @@ run(void)
  				continue;  /* we have time, try to find idle */
  		}
-
+ 
 +		if (tinsync(su_timeout)) {
 +			/*
 +			 * on synchronized-update draw-suspension: don't reset
@@ -254,5 +254,6 @@ index 210f184..27ff4e2 100644
  		if (blinktimeout && tattrset(ATTR_BLINK)) {
 
 base-commit: b27a383a3acc7decf00e6e889fca265430b5d329
---
+-- 
 2.17.1
+

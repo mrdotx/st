@@ -1148,7 +1148,6 @@ selscroll(int orig, int n)
 		} else {
 			selnormalize();
 		}
-		selnormalize();
 	}
 }
 

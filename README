@@ -34,7 +34,7 @@ Based on Aurélien APTEL <aurelien dot aptel at gmail dot com> bt source code.
 
 Version
 -------
-0.8.3
+0.8.4
 
 Scroll
 ------
@@ -62,4 +62,4 @@ Invert Colors   - alt + i
 
 Last implemented commit
 -----------------------
-2020-06-17 21:47	config.mk: use PKG_CONFIG in commented OpenBSD section	Hiltjo Posthuma
+2020-06-19 09:27	bump version to 0.8.4	Hiltjo Posthuma

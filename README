@@ -38,7 +38,7 @@ Version
 
 Scroll
 ------
-suckless scrollbackbuffer program for st implemented (disabled)
+suckless scrollbackbuffer program for st implemented
     https://git.suckless.org/scroll/
 
 Patches
@@ -55,7 +55,7 @@ st-universcroll-0.8.4.diff
 
 Key - Bindings
 --------------
-Zoom            - ctrl + plus, minus, equel
+Zoom            - ctrl + plus, minus, equel (shift + mouse scroll)
 Scollback       - shift + page_up, page_down (mouse scroll)
 Copy URL        - alt + y
 Open Copied URL - alt + o

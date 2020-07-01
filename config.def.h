@@ -231,8 +231,6 @@ static MouseShortcut mshortcuts[] = {
 	{ XK_NO_MOD,            Button4, ttysend,        {.s = "\031"} },
 	{ XK_NO_MOD,            Button5, ttysend,        {.s = "\033[6;2~"}, 0, -1 },
 	{ XK_NO_MOD,            Button5, ttysend,        {.s = "\005"} },
-	{ XK_ANY_MOD,           Button4, zoom,           {.f =  +1} },
-	{ XK_ANY_MOD,           Button5, zoom,           {.f =  -1} },
 	{ ShiftMask,            Button4, zoom,           {.f =  +1} },
 	{ ShiftMask,            Button5, zoom,           {.f =  -1} },
 };

@@ -190,7 +190,7 @@ static uint forcemousemod = ShiftMask;
 ResourcePref resources[] = {
 		{ "font",         STRING,  &font },
 		{ "fontemoji",    STRING,  &font2[0] },
-		{ "fontbraille",  STRING,  &font2[1] },
+		{ "fontfallback", STRING,  &font2[1] },
 		{ "color0",       STRING,  &colorname[0] },
 		{ "color1",       STRING,  &colorname[1] },
 		{ "color2",       STRING,  &colorname[2] },

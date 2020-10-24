@@ -60,4 +60,4 @@ Invert Colors   - alt + i
 
 Last implemented commit
 -----------------------
-2020-06-19 09:27	bump version to 0.8.4	Hiltjo Posthuma
+2020-10-18 09:18	remove unused variable from previous patch	Hiltjo Posthuma

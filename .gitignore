@@ -1,9 +1,9 @@
 # path:       /home/klassiker/.local/share/repos/st/.gitignore
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/st
-# date:       2020-08-31T17:55:34+0200
+# date:       2020-11-13T14:39:52+0100
 
-config.h
-st
-st.o
-x.o
+/config.h
+/st
+/st.o
+/x.o

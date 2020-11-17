@@ -42,7 +42,6 @@ st-alpha-0.8.2.diff
 st-font2-20190416-ba72400.diff
 st-copyurl-20190202-3be4cf1.diff
 st-openclipboard-20190202-3be4cf1.diff
-st-invert-0.8.2.diff
 st-appsync-20200618-b27a383.diff
 st-xresources-20200604-9ba7ecf.diff
 st-scrollback-20200419-72e3f6c.diff
@@ -56,7 +55,6 @@ Zoom            - ctrl + plus, minus, equel (shift + mouse scroll)
 Scollback       - shift + page_up, page_down (mouse scroll)
 Copy URL        - alt + y
 Open Copied URL - alt + o
-Invert Colors   - alt + i
 
 Last implemented commit
 -----------------------

@@ -260,7 +260,6 @@ static Shortcut shortcuts[] = {
     { ShiftMask,            XK_Page_Down,   kscrolldown,    {.i = -1} },
     { MODKEY,               XK_y,           copyurl,        {.i =  0} },
     { MODKEY,               XK_o,           opencopied,     {.v = "link_handler.sh"} },
-    { MODKEY,               XK_i,           invert,         { }       },
 };
 
 /*

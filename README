@@ -58,4 +58,4 @@ Open Copied URL - alt + o
 
 Last implemented commit
 -----------------------
-2020-10-18 09:18	remove unused variable from previous patch	Hiltjo Posthuma
+2021-03-19 10:54	fix: correctly encode mouse buttons >= 8 in X10 and SGR mode	Hiltjo Posthuma

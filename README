@@ -48,6 +48,7 @@ st-scrollback-20201205-4ef0cbd.diff
 st-scrollback-mouse-20191024-a2c479c.diff
 st-scrollback-mouse-altscreen-20200416-5703aa0.diff
 st-w3m-0.8.3.diff
+st-keyboard_select-20200617-9ba7ecf.diff
 
 Key - Bindings
 --------------
@@ -55,6 +56,21 @@ Zoom            - ctrl + plus, minus, equel (shift + mouse scroll)
 Scollback       - shift + page_up, page_down (mouse scroll)
 Copy URL        - alt + y
 Open Copied URL - alt + o
+Keyboard Select - ctrl + shift + esc
+
+Keyboard Select - Navigation
+----------------------------
+h, j, k, l:    move cursor left/down/up/right (also with arrow keys)
+!, _, *:       move cursor to the middle of the line/column/screen
+Backspace, $:  move cursor to the beginning/end of the line
+PgUp, PgDown : move cursor to the beginning/end of the column
+Home, End:     move cursor to the top/bottom left corner of the screen
+/, ?:          activate input mode and search up/down
+n, N:          repeat last search, up/down
+s:             toggle move/selection mode
+t:             toggle regular/rectangular selection type
+Return:        quit keyboard_select, keeping the highlight of the selection
+Escape:        quit keyboard_select
 
 Last implemented commit
 -----------------------

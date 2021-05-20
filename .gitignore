@@ -1,8 +1,9 @@
 # path:   /home/klassiker/.local/share/repos/st/.gitignore
 # author: klassiker [mrdotx]
 # github: https://github.com/mrdotx/st
-# date:   2021-01-15T14:00:34+0100
+# date:   2021-05-20T10:29:57+0200
 
+/boxdraw.o
 /config.h
 /st
 /st.o

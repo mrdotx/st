@@ -82,9 +82,9 @@ void die(const char *, ...);
 void redraw(void);
 void draw(void);
 
+void opencopied(const Arg *);
 void kscrolldown(const Arg *);
 void kscrollup(const Arg *);
-void opencopied(const Arg *);
 void printscreen(const Arg *);
 void printsel(const Arg *);
 void sendbreak(const Arg *);
@@ -97,7 +97,7 @@ void tnew(int, int);
 void tresize(int, int);
 void tsetdirtattr(int);
 void ttyhangup(void);
-int ttynew(char *, char *, char *, char **);
+int ttynew(const char *, char *, const char *, char **);
 size_t ttyread(void);
 void ttyresize(int, int);
 void ttywrite(const char *, size_t, int);
@@ -115,7 +115,7 @@ size_t utf8encode(Rune, char *);
 
 void *xmalloc(size_t);
 void *xrealloc(void *, size_t);
-char *xstrdup(char *);
+char *xstrdup(const char *);
 int  trt_kbdselect(KeySym, char *, int);
 
 int isboxdraw(Rune);
@@ -138,5 +138,5 @@ extern char *termname;
 extern unsigned int tabspaces;
 extern unsigned int defaultfg;
 extern unsigned int defaultbg;
-extern const int boxdraw, boxdraw_bold, boxdraw_braille;
 extern float alpha;
+extern const int boxdraw, boxdraw_bold, boxdraw_braille;

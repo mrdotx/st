@@ -108,7 +108,7 @@ typedef struct {
 	Window win;
 	Drawable buf;
 	GlyphFontSpec *specbuf; /* font spec buffer used for rendering */
-    Atom xembed, wmdeletewin, netwmname, netwmiconname, netwmpid;
+	Atom xembed, wmdeletewin, netwmname, netwmiconname, netwmpid;
 	struct {
 		XIM xim;
 		XIC xic;
@@ -172,7 +172,7 @@ static void xresize(int, int);
 static void xhints(void);
 static int xloadcolor(int, const char *, Color *);
 static int xloadfont(Font *, FcPattern *);
-static void xloadfonts(char *, double);
+static void xloadfonts(const char *, double);
 static int xloadsparefont(FcPattern *, int);
 static void xloadsparefonts(void);
 static void xunloadfont(Font *);
@@ -743,6 +743,7 @@ cresize(int width, int height)
 	row = (win.h - 2 * borderpx) / win.ch;
 	col = MAX(1, col);
 	row = MAX(1, row);
+
 	tresize(col, row);
 	xresize(col, row);
 	ttyresize(win.tw, win.th);
@@ -754,7 +755,7 @@ xresize(int col, int row)
 	win.tw = col * win.cw;
 	win.th = row * win.ch;
 
-    XFreePixmap(xw.dpy, xw.buf);
+	XFreePixmap(xw.dpy, xw.buf);
 	xw.buf = XCreatePixmap(xw.dpy, xw.win, win.w, win.h,
 			xw.depth);
 	XftDrawChange(xw.draw, xw.buf);
@@ -979,7 +980,7 @@ xloadfont(Font *f, FcPattern *pattern)
 }
 
 void
-xloadfonts(char *fontstr, double fontsize)
+xloadfonts(const char *fontstr, double fontsize)
 {
 	FcPattern *pattern;
 	double fontval;
@@ -987,7 +988,7 @@ xloadfonts(char *fontstr, double fontsize)
 	if (fontstr[0] == '-')
 		pattern = XftXlfdParse(fontstr, False, False);
 	else
-		pattern = FcNameParse((FcChar8 *)fontstr);
+		pattern = FcNameParse((const FcChar8 *)fontstr);
 
 	if (!pattern)
 		die("can't open font %s\n", fontstr);
@@ -1053,7 +1054,7 @@ xloadsparefont(FcPattern *pattern, int flags)
 {
 	FcPattern *match;
 	FcResult result;
-
+	
 	match = FcFontMatch(NULL, pattern, &result);
 	if (!match) {
 		return 1;
@@ -1095,50 +1096,50 @@ xloadsparefonts(void)
 	}
 
 	for (fp = font2; fp - font2 < fc; ++fp) {
-
+	
 		if (**fp == '-')
 			pattern = XftXlfdParse(*fp, False, False);
 		else
 			pattern = FcNameParse((FcChar8 *)*fp);
-
+	
 		if (!pattern)
 			die("can't open spare font %s\n", *fp);
-
+	   		
 		if (defaultfontsize > 0) {
 			sizeshift = usedfontsize - defaultfontsize;
 			if (sizeshift != 0 &&
 					FcPatternGetDouble(pattern, FC_PIXEL_SIZE, 0, &fontval) ==
-					FcResultMatch) {
+					FcResultMatch) {	
 				fontval += sizeshift;
 				FcPatternDel(pattern, FC_PIXEL_SIZE);
 				FcPatternDel(pattern, FC_SIZE);
 				FcPatternAddDouble(pattern, FC_PIXEL_SIZE, fontval);
 			}
 		}
-
+	
 		FcPatternAddBool(pattern, FC_SCALABLE, 1);
-
+	
 		FcConfigSubstitute(NULL, pattern, FcMatchPattern);
 		XftDefaultSubstitute(xw.dpy, xw.scr, pattern);
-
+	
 		if (xloadsparefont(pattern, FRC_NORMAL))
 			die("can't open spare font %s\n", *fp);
-
+	
 		FcPatternDel(pattern, FC_SLANT);
 		FcPatternAddInteger(pattern, FC_SLANT, FC_SLANT_ITALIC);
 		if (xloadsparefont(pattern, FRC_ITALIC))
 			die("can't open spare font %s\n", *fp);
-
+			
 		FcPatternDel(pattern, FC_WEIGHT);
 		FcPatternAddInteger(pattern, FC_WEIGHT, FC_WEIGHT_BOLD);
 		if (xloadsparefont(pattern, FRC_ITALICBOLD))
 			die("can't open spare font %s\n", *fp);
-
+	
 		FcPatternDel(pattern, FC_SLANT);
 		FcPatternAddInteger(pattern, FC_SLANT, FC_SLANT_ROMAN);
 		if (xloadsparefont(pattern, FRC_BOLD))
 			die("can't open spare font %s\n", *fp);
-
+	
 		FcPatternDestroy(pattern);
 	}
 }
@@ -1281,7 +1282,7 @@ xinit(int cols, int rows)
 
 	memset(&gcvalues, 0, sizeof(gcvalues));
 	gcvalues.graphics_exposures = False;
-    xw.buf = XCreatePixmap(xw.dpy, xw.win, win.w, win.h, xw.depth);
+	xw.buf = XCreatePixmap(xw.dpy, xw.win, win.w, win.h, xw.depth);
 	dc.gc = XCreateGC(xw.dpy, xw.buf, GCGraphicsExposures, &gcvalues);
 	XSetForeground(xw.dpy, dc.gc, dc.col[defaultbg].pixel);
 	XFillRectangle(xw.dpy, xw.buf, dc.gc, 0, 0, win.w, win.h);
@@ -1319,7 +1320,7 @@ xinit(int cols, int rows)
 	xw.xembed = XInternAtom(xw.dpy, "_XEMBED", False);
 	xw.wmdeletewin = XInternAtom(xw.dpy, "WM_DELETE_WINDOW", False);
 	xw.netwmname = XInternAtom(xw.dpy, "_NET_WM_NAME", False);
-    xw.netwmiconname = XInternAtom(xw.dpy, "_NET_WM_ICON_NAME", False);
+	xw.netwmiconname = XInternAtom(xw.dpy, "_NET_WM_ICON_NAME", False);
 	XSetWMProtocols(xw.dpy, xw.win, &xw.wmdeletewin, 1);
 
 	xw.netwmpid = XInternAtom(xw.dpy, "_NET_WM_PID", False);
@@ -1792,7 +1793,7 @@ xdrawline(Line line, int x1, int y1, int x2)
 void
 xfinishdraw(void)
 {
-    XCopyArea(xw.dpy, xw.buf, xw.win, dc.gc, 0, 0, win.w,
+	XCopyArea(xw.dpy, xw.buf, xw.win, dc.gc, 0, 0, win.w,
 			win.h, 0, 0);
 	XSetForeground(xw.dpy, dc.gc,
 			dc.col[IS_SET(MODE_REVERSE)?

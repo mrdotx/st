@@ -75,4 +75,4 @@ Escape:        quit keyboard_select
 
 Last implemented commit
 -----------------------
-2021-03-28 19:16	Mild const-correctness improvements.	Markus F.X.J. Oberhumer
+2021-07-17 22:14	Add 14th bit to XK_SWITCH_MOD bitmask	Petar Kapriš

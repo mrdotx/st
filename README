@@ -75,4 +75,4 @@ Escape:        quit keyboard_select
 
 Last implemented commit
 -----------------------
-2021-07-17 22:14	Add 14th bit to XK_SWITCH_MOD bitmask	Petar Kapriš
+2021-08-24 11:44	fix possible rare crash when Xutf8TextPropertyToTextList fails	Hiltjo Posthuma

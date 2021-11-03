@@ -8,7 +8,7 @@
 static char *font = "DejaVuSansMono Nerd Font:pixelsize=16:antialias=true:autohint=true";
 /* Spare fonts */
 static char *font2[] = {
-		"Source-Code-Pro:pixelsize=14:antialias=true:autohint=true",
+		"DejaVu Sans:pixelsize=14:antialias=true:autohint=true",
 		"JoyPixels:pixelsize=14:antialias=true:autohint=true"
 	};
 

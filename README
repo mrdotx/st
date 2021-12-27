@@ -75,4 +75,4 @@ Escape:        quit keyboard_select
 
 Last implemented commit
 -----------------------
-2021-08-24 11:44	fix possible rare crash when Xutf8TextPropertyToTextList fails	Hiltjo Posthuma
+2021-12-26 18:00	follow-up fix for OSC color sequences, return	Hiltjo Posthuma

@@ -2873,7 +2873,7 @@ copyurl(const Arg *arg) {
 		colend = 0, /* column of last occurrence */
 		passes = 0; /* how many rows have been scanned */
 
-	char *linestr = calloc(sizeof(char), term.col+1); /* assume ascii */
+	char *linestr = calloc(term.col+1, sizeof(Rune));
 	char *c = NULL,
 		 *match = NULL;
 
@@ -2893,9 +2893,6 @@ copyurl(const Arg *arg) {
  		** we hit previous occurrence of URL
 		*/
 		for (col = 0, i = 0; col < colend; ++col,++i) {
-			/* assume ascii */
-			if (term.line[row][col].u > 127)
-				continue;
 			linestr[i] = term.line[row][col].u;
 		}
 		linestr[term.col] = '\0';

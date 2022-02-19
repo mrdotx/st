@@ -75,4 +75,4 @@ Escape:        quit keyboard_select
 
 Last implemented commit
 -----------------------
-2022-01-12 08:44	X10/SGR mouse: use alt as meta key instead of super/windows key	Hiltjo Posthuma
+2022-02-17 14:00	Delay redrawals on palette changes	Santtu Lakkala

@@ -8,9 +8,9 @@
 static char *font = "DejaVuSansMono Nerd Font:pixelsize=16:antialias=true:autohint=true";
 /* Spare fonts */
 static char *font2[] = {
-		"DejaVu Sans:pixelsize=14:antialias=true:autohint=true",
-		"JoyPixels:pixelsize=14:antialias=true:autohint=true"
-	};
+	"JoyPixels:pixelsize=14:antialias=true:autohint=true",
+	"DejaVu Sans:pixelsize=14:antialias=true:autohint=true"
+};
 
 static int borderpx = 2;
 
@@ -200,8 +200,8 @@ static uint forcemousemod = ShiftMask;
  */
 ResourcePref resources[] = {
 		{ "font",         STRING,  &font },
-		{ "fontemoji",    STRING,  &font2[0] },
-		{ "fontfallback", STRING,  &font2[1] },
+		{ "font0",        STRING,  &font2[0] },
+		{ "font1",        STRING,  &font2[1] },
 		{ "color0",       STRING,  &colorname[0] },
 		{ "color1",       STRING,  &colorname[1] },
 		{ "color2",       STRING,  &colorname[2] },

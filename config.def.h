@@ -5,11 +5,11 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "DejaVuSansMono Nerd Font:pixelsize=16:antialias=true:autohint=true";
+static char *font = "DejaVuSansMono Nerd Font:pixelsize=16";
 /* Spare fonts */
 static char *font2[] = {
-	"JoyPixels:pixelsize=14:antialias=true:autohint=true",
-	"DejaVu Sans:pixelsize=14:antialias=true:autohint=true"
+	"JoyPixels:pixelsize=14",
+	"DejaVu Sans:pixelsize=14"
 };
 
 static int borderpx = 2;

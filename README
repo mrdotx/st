@@ -38,7 +38,7 @@ Version
 
 Patches
 -------
-st-alpha-0.8.2.diff
+st-alpha-0.8.5.diff
 st-font2-20190416-ba72400.diff
 st-copyurl-0.8.4.diff
 st-openclipboard-20190202-3be4cf1.diff
@@ -75,4 +75,4 @@ Escape:        quit keyboard_select
 
 Last implemented commit
 -----------------------
-2022-02-17 14:00	Delay redrawals on palette changes	Santtu Lakkala
+2022-03-13 09:44	make underlines and strikethroughs respect `chscale`	Zacchary Dempsey-Plante

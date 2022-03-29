@@ -75,4 +75,4 @@ Escape:        quit keyboard_select
 
 Last implemented commit
 -----------------------
-2022-03-13 09:44	make underlines and strikethroughs respect `chscale`	Zacchary Dempsey-Plante
+2022-03-18 11:03	base64_digits: reduce scope, implicit zero, +1 size	NRK

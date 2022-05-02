@@ -8,8 +8,11 @@
 static char *font = "DejaVuSansMono Nerd Font:pixelsize=16";
 /* Spare fonts */
 static char *font2[] = {
-	"JoyPixels:pixelsize=14",
-	"DejaVu Sans:pixelsize=14"
+	"DejaVu Sans:pixelsize=14",
+	"Font Awesome 6 Free:style=Solid:pixelsize=14",
+	"Font Awesome 6 Free:style=Regular:pixelsize=14",
+	"Font Awesome 6 Brands:style=Regular:pixelsize=14",
+	"JoyPixels:pixelsize=14"
 };
 
 static int borderpx = 2;
@@ -202,6 +205,9 @@ ResourcePref resources[] = {
 		{ "font",         STRING,  &font },
 		{ "font0",        STRING,  &font2[0] },
 		{ "font1",        STRING,  &font2[1] },
+		{ "font2",        STRING,  &font2[2] },
+		{ "font3",        STRING,  &font2[3] },
+		{ "font4",        STRING,  &font2[4] },
 		{ "color0",       STRING,  &colorname[0] },
 		{ "color1",       STRING,  &colorname[1] },
 		{ "color2",       STRING,  &colorname[2] },

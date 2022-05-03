@@ -75,4 +75,4 @@ Escape:        quit keyboard_select
 
 Last implemented commit
 -----------------------
-2022-03-18 11:03	base64_digits: reduce scope, implicit zero, +1 size	NRK
+2022-05-01 16:38	Makefile: add manual path for OpenBSD	Hiltjo Posthuma

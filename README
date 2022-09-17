@@ -75,4 +75,4 @@ Escape:        quit keyboard_select
 
 Last implemented commit
 -----------------------
-2022-05-01 16:38	Makefile: add manual path for OpenBSD	Hiltjo Posthuma
+2022-09-16 21:07	FAQ: document the color emojis crash issue which affected some systems is fixed	Hiltjo Posthuma

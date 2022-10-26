@@ -75,4 +75,4 @@ Escape:        quit keyboard_select
 
 Last implemented commit
 -----------------------
-2022-10-04 17:40	bump version to 0.9	Hiltjo Posthuma
+2022-10-25 15:11	fix buffer overflow when handling long composed input	Hiltjo Posthuma

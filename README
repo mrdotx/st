@@ -75,4 +75,4 @@ Escape:        quit keyboard_select
 
 Last implemented commit
 -----------------------
-2022-10-25 15:11	fix buffer overflow when handling long composed input	Hiltjo Posthuma
+2023-02-07 19:00	ignore C1 control characters in UTF-8 mode	Hiltjo Posthuma

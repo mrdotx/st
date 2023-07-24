@@ -75,4 +75,4 @@ Escape:        quit keyboard_select
 
 Last implemented commit
 -----------------------
-2023-02-07 19:00	ignore C1 control characters in UTF-8 mode	Hiltjo Posthuma
+2023-06-25 05:38	Fix for wide character being incorrectly cleared on MODE_INSERT	Shi Tian

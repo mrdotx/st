@@ -75,4 +75,4 @@ Escape:        quit keyboard_select
 
 Last implemented commit
 -----------------------
-2023-06-25 05:38	Fix for wide character being incorrectly cleared on MODE_INSERT	Shi Tian
+2023-09-22 13:16	Makefile: remove the options target	Hiltjo Posthuma

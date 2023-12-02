@@ -5,11 +5,11 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "DejaVuSansM Nerd Font Mono:pixelsize=16";
+static char *font = "DejaVu Sans Mono:pixelsize=16";
 /* Spare fonts */
 static char *font2[] = {
-	"DejaVu Sans:pixelsize=16",
-	"Noto Color Emoji:pixelsize=16"
+	"DejaVuSansM Nerd Font:pixelsize=16",
+	"Noto Color Emoji:pixelsize=14"
 };
 
 static int borderpx = 2;

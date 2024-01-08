@@ -8,6 +8,7 @@
 static char *font = "DejaVu Sans Mono:pixelsize=16";
 /* Spare fonts */
 static char *font2[] = {
+	"DejaVu Sans:pixelsize=17",
 	"DejaVuSansM Nerd Font:pixelsize=16",
 	"Noto Color Emoji:pixelsize=14"
 };
@@ -202,6 +203,7 @@ ResourcePref resources[] = {
 		{ "font",         STRING,  &font },
 		{ "font0",        STRING,  &font2[0] },
 		{ "font1",        STRING,  &font2[1] },
+		{ "font2",        STRING,  &font2[2] },
 		{ "color0",       STRING,  &colorname[0] },
 		{ "color1",       STRING,  &colorname[1] },
 		{ "color2",       STRING,  &colorname[2] },

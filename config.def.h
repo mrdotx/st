@@ -8,7 +8,7 @@
 static char *font = "DejaVu Sans Mono:pixelsize=16";
 /* Spare fonts */
 static char *font2[] = {
-	"DejaVu Sans:pixelsize=17",
+	"DejaVu Sans:pixelsize=16",
 	"DejaVuSansM Nerd Font:pixelsize=16",
 	"Noto Color Emoji:pixelsize=14"
 };

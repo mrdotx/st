@@ -92,8 +92,8 @@ enum escape_state {
 
 typedef struct {
     Glyph attr; /* current char attributes */
-    int x;
-    int y;
+	int x; /* terminal column */
+	int y; /* terminal row */
     char state;
 } TCursor;
 
@@ -1832,6 +1832,7 @@ csihandle(void)
 		}
 		break;
 	case 'S': /* SU -- Scroll <n> line up */
+		if (csiescseq.priv) break;
 		DEFAULT(csiescseq.arg[0], 1);
 		tscrollup(term.top, csiescseq.arg[0], 0);
 		break;
@@ -2312,12 +2313,16 @@ tstrsequence(uchar c)
 void
 tcontrolcode(uchar ascii)
 {
+	size_t i;
+
 	switch (ascii) {
 	case '\t':   /* HT */
 		tputtab(1);
 		return;
 	case '\b':   /* BS */
-		tmoveto(term.c.x-1, term.c.y);
+		for (i = 1; term.c.x && term.line[term.c.y][term.c.x - i].u == 0; ++i)
+			;
+		tmoveto(term.c.x - i, term.c.y);
 		return;
 	case '\r':   /* CR */
 		tmoveto(0, term.c.y);

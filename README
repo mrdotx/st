@@ -75,4 +75,4 @@ Escape:        quit keyboard_select
 
 Last implemented commit
 -----------------------
-2024-02-25 00:31	Fix cursor move with wide glyphs	Quentin Rameau
+2024-03-17 13:42	config.def.h: improve latency for the default configuration	Hiltjo Posthuma

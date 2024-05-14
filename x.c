@@ -1714,7 +1714,7 @@ xdrawcursor(int cx, int cy, Glyph g, int ox, int oy, Glyph og)
 		case 4: /* Steady Underline */
 			XftDrawRect(xw.draw, &drawcol,
 					borderpx + cx * win.cw,
-					borderpx + (cy + 1) * win.ch - \
+					borderpx + (cy + 1) * win.ch -
 						cursorthickness,
 					win.cw, cursorthickness);
 			break;
@@ -2150,7 +2150,7 @@ run(void)
 				trigger = now;
 				drawing = 1;
 			}
-			timeout = (maxlatency - TIMEDIFF(now, trigger)) \
+			timeout = (maxlatency - TIMEDIFF(now, trigger))
 			          / maxlatency * minlatency;
 			if (timeout > 0)
 				continue;  /* we have time, try to find idle */

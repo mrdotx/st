@@ -2014,6 +2014,10 @@ strhandle(void)
 			if (narg > 1)
 				xsettitle(strescseq.args[1]);
 			return;
+		/* NOTE: 2024-05-14 (yama):
+		   Not entirely sure how and why this single line fixes the
+		   `erresc: unknown str ESC]8` issue */
+		case 8:
 		case 52:
 			if (narg > 2 && allowwindowops) {
 				dec = base64dec(strescseq.args[2]);

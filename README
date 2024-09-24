@@ -75,4 +75,4 @@ Escape:        quit keyboard_select
 
 Last implemented commit
 -----------------------
-2024-05-01 18:45	support colons in SGR character attributes	Hiltjo Posthuma
+2024-08-09 11:33	fix BadMatch error when embedding on some windows	Lucas de Sena

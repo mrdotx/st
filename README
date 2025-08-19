@@ -34,7 +34,7 @@ Based on Aurélien APTEL <aurelien dot aptel at gmail dot com> bt source code.
 
 Version
 -------
-0.9.2
+0.9.3
 
 Patches
 -------
@@ -75,4 +75,4 @@ Escape:        quit keyboard_select
 
 Last implemented commit
 -----------------------
-2025-01-26 12:40	Do not interpret CSI ? u as DECRC	Johannes Altmanninger
+2025-08-09 12:35	bump version to 0.9.3	Hiltjo Posthuma

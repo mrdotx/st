@@ -32,6 +32,7 @@ you can manually run `tic -sx st.info`.
 You can add the absolute path of both programs in your config.h file. You only
 have to modify the value of utmp and scroll variables.
 
+
 ## Why doesn't the Del key work in some programs?
 
 Taken from the terminfo manpage:

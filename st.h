@@ -116,7 +116,6 @@ size_t utf8encode(Rune, char *);
 void *xmalloc(size_t);
 void *xrealloc(void *, size_t);
 char *xstrdup(const char *);
-int xgetcolor(int x, unsigned char *r, unsigned char *g, unsigned char *b);
 
 int  trt_kbdselect(KeySym, char *, int);
 

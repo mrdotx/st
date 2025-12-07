@@ -75,4 +75,4 @@ Escape:        quit keyboard_select
 
 Last implemented commit
 -----------------------
-2025-08-09 12:35	bump version to 0.9.3	Hiltjo Posthuma
+2025-11-28 15:31	Disable bracked paste in reset	Roberto E. Vargas Caballero

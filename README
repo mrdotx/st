@@ -75,4 +75,4 @@ Escape:        quit keyboard_select
 
 Last implemented commit
 -----------------------
-2025-11-28 15:31	Disable bracked paste in reset	Roberto E. Vargas Caballero
+2026-01-15 05:00	st: guard tsetdirt() against zero-sized terminal	Milos Nikic

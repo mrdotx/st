@@ -142,16 +142,16 @@ Print the full screen to the
 Print the selection to the
 .I iofile.
 .TP
-.B Ctrl-Shift-Page Up
+.B Ctrl-+
 Increase font size.
 .TP
-.B Ctrl-Shift-Page Down
+.B Ctrl--
 Decrease font size.
 .TP
-.B Ctrl-Shift-Home
+.B Ctrl-=
 Reset to default font size.
 .TP
-.B Ctrl-Shift-y
+.B Ctrl-Shift-y or Ctrl-Shift-Insert
 Paste from primary selection (middle mouse button).
 .TP
 .B Ctrl-Shift-c
@@ -159,6 +159,86 @@ Copy the selected text to the clipboard selection.
 .TP
 .B Ctrl-Shift-v
 Paste from the clipboard selection.
+.TP
+.B Shift-Up and Shift-Down or Mouse-Scroll
+Scroll back through terminal output (history).
+.TP
+.B Alt-y
+Select and copy the last URL displayed (Multiple invocations cycle through
+the available URLs).
+.TP
+.B Alt-o
+Open contents (URL) of the clipboard in a user-defined tool (browser).
+.TP
+.B Ctrl-Shift-Escape
+Select and Copy text to primary buffer with keyboard shortcuts
+(like the perl extension keyboard-select for urxvt).
+.sp 1
+.TS
+tab(@);
+lw(11.7n) lw(60.3n).
+T{
+Keys
+T}@T{
+Description
+T}
+_
+T{
+h, j, k, l
+T}@T{
+move cursor left/down/up/right (also with arrow keys)
+T}
+T{
+!, _, *
+T}@T{
+move cursor to the middle of the line/column/screen
+T}
+T{
+Backspace, $
+T}@T{
+move cursor to the beginning/end of the line
+T}
+T{
+PgUp, PgDown
+T}@T{
+move cursor to the beginning/end of the column
+T}
+T{
+Home, End
+T}@T{
+move cursor to the top/bottom left corner of the screen
+T}
+T{
+/, ?
+T}@T{
+activate input mode and search up/down
+T}
+T{
+n, N
+T}@T{
+repeat last search, up/down
+T}
+T{
+s
+T}@T{
+toggle move/selection mode
+T}
+T{
+t
+T}@T{
+toggle regular/rectangular selection type
+T}
+T{
+Return
+T}@T{
+quit keyboard_select, keeping the highlight of the selection
+T}
+T{
+Escape
+T}@T{
+quit keyboard_select
+T}
+.TE
 .SH CUSTOMIZATION
 .B st
 can be customized by creating a custom config.h and (re)compiling the source

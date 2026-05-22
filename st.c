@@ -1415,32 +1415,36 @@ tdefcolor(const int *attr, int *npar, int l)
 	switch (attr[*npar + 1]) {
 	case 2: /* direct color in RGB space */
 		if (*npar + 4 >= l) {
-			fprintf(stderr,
-				"erresc(38): Incorrect number of parameters (%d)\n",
-				*npar);
+			if (!disable_errmsg)
+				fprintf(stderr,
+					"erresc(38): Incorrect number of parameters (%d)\n",
+					*npar);
 			break;
 		}
 		r = attr[*npar + 2];
 		g = attr[*npar + 3];
 		b = attr[*npar + 4];
 		*npar += 4;
-		if (!BETWEEN(r, 0, 255) || !BETWEEN(g, 0, 255) || !BETWEEN(b, 0, 255))
-			fprintf(stderr, "erresc: bad rgb color (%u,%u,%u)\n",
-				r, g, b);
-		else
+		if (!BETWEEN(r, 0, 255) || !BETWEEN(g, 0, 255) || !BETWEEN(b, 0, 255)) {
+			if (!disable_errmsg)
+				fprintf(stderr, "erresc: bad rgb color (%u,%u,%u)\n",
+					r, g, b);
+		} else
 			idx = TRUECOLOR(r, g, b);
 		break;
 	case 5: /* indexed color */
 		if (*npar + 2 >= l) {
-			fprintf(stderr,
-				"erresc(38): Incorrect number of parameters (%d)\n",
-				*npar);
+			if (!disable_errmsg)
+				fprintf(stderr,
+					"erresc(38): Incorrect number of parameters (%d)\n",
+					*npar);
 			break;
 		}
 		*npar += 2;
-		if (!BETWEEN(attr[*npar], 0, 255))
-			fprintf(stderr, "erresc: bad fgcolor %d\n", attr[*npar]);
-		else
+		if (!BETWEEN(attr[*npar], 0, 255)) {
+			if (!disable_errmsg)
+				fprintf(stderr, "erresc: bad fgcolor %d\n", attr[*npar]);
+		} else
 			idx = attr[*npar];
 		break;
 	case 0: /* implemented defined (only foreground) */
@@ -1448,8 +1452,9 @@ tdefcolor(const int *attr, int *npar, int l)
 	case 3: /* direct color in CMY space */
 	case 4: /* direct color in CMYK space */
 	default:
-		fprintf(stderr,
-		        "erresc(38): gfx attr %d unknown\n", attr[*npar]);
+		if (!disable_errmsg)
+			fprintf(stderr,
+					"erresc(38): gfx attr %d unknown\n", attr[*npar]);
 		break;
 	}
 
@@ -1554,10 +1559,12 @@ tsetattr(const int *attr, int l)
 			} else if (BETWEEN(attr[i], 100, 107)) {
 				term.c.attr.bg = attr[i] - 100 + 8;
 			} else {
-				fprintf(stderr,
-					"erresc(default): gfx attr %d unknown\n",
-					attr[i]);
-				csidump();
+				if (!disable_errmsg) {
+					fprintf(stderr,
+						"erresc(default): gfx attr %d unknown\n",
+						attr[i]);
+					csidump();
+				}
 			}
 			break;
 		}
@@ -1679,9 +1686,10 @@ tsetmode(int priv, int set, const int *args, int narg)
 				      codes. */
 				break;
 			default:
-				fprintf(stderr,
-					"erresc: unknown private set/reset mode %d\n",
-					*args);
+				if (!disable_errmsg)
+					fprintf(stderr,
+						"erresc: unknown private set/reset mode %d\n",
+						*args);
 				break;
 			}
 		} else {
@@ -1701,9 +1709,10 @@ tsetmode(int priv, int set, const int *args, int narg)
 				MODBIT(term.mode, set, MODE_CRLF);
 				break;
 			default:
-				fprintf(stderr,
-					"erresc: unknown set/reset mode %d\n",
-					*args);
+				if (!disable_errmsg)
+					fprintf(stderr,
+						"erresc: unknown set/reset mode %d\n",
+						*args);
 				break;
 			}
 		}
@@ -1719,9 +1728,11 @@ csihandle(void)
 	switch (csiescseq.mode[0]) {
 	default:
 	unknown:
-		fprintf(stderr, "erresc: unknown csi ");
-		csidump();
-		/* die(""); */
+		if (!disable_errmsg) {
+			fprintf(stderr, "erresc: unknown csi ");
+			csidump();
+			/* die(""); */
+		}
 		break;
 	case '@': /* ICH -- Insert <n> blank char */
 		DEFAULT(csiescseq.arg[0], 1);
@@ -1972,9 +1983,10 @@ osc_color_response(int num, int index, int is_osc4)
 	unsigned char r, g, b;
 
 	if (xgetcolor(is_osc4 ? num : index, &r, &g, &b)) {
-		fprintf(stderr, "erresc: failed to fetch %s color %d\n",
-		        is_osc4 ? "osc4" : "osc",
-		        is_osc4 ? num : index);
+		if (!disable_errmsg)
+			fprintf(stderr, "erresc: failed to fetch %s color %d\n",
+					is_osc4 ? "osc4" : "osc",
+					is_osc4 ? num : index);
 		return;
 	}
 
@@ -2028,7 +2040,8 @@ strhandle(void)
 					xsetsel(dec);
 					xclipcopy();
 				} else {
-					fprintf(stderr, "erresc: invalid base64\n");
+					if (!disable_errmsg)
+						fprintf(stderr, "erresc: invalid base64\n");
 				}
 			}
 			return;
@@ -2044,8 +2057,9 @@ strhandle(void)
 			if (!strcmp(p, "?")) {
 				osc_color_response(par, osc_table[j].idx, 0);
 			} else if (xsetcolorname(osc_table[j].idx, p)) {
-				fprintf(stderr, "erresc: invalid %s color: %s\n",
-				        osc_table[j].str, p);
+				if (!disable_errmsg)
+					fprintf(stderr, "erresc: invalid %s color: %s\n",
+							osc_table[j].str, p);
 			} else {
 				tfulldirt();
 			}
@@ -2065,8 +2079,9 @@ strhandle(void)
 					xloadcols();
 					return; /* color reset without parameter */
 				}
-				fprintf(stderr, "erresc: invalid color j=%d, p=%s\n",
-				        j, p ? p : "(null)");
+				if (!disable_errmsg)
+					fprintf(stderr, "erresc: invalid color j=%d, p=%s\n",
+							j, p ? p : "(null)");
 			} else {
 				/*
 				 * TODO if defaultbg color is changed, borders
@@ -2083,7 +2098,9 @@ strhandle(void)
 			if ((j = par - 110) < 0 || j >= LEN(osc_table))
 				break; /* shouldn't be possible */
 			if (xsetcolorname(osc_table[j].idx, NULL)) {
-				fprintf(stderr, "erresc: %s color not found\n", osc_table[j].str);
+				if (!disable_errmsg)
+					fprintf(stderr, "erresc: %s color not found\n",
+							osc_table[j].str);
 			} else {
 				tfulldirt();
 			}
@@ -2105,8 +2122,10 @@ strhandle(void)
 		return;
 	}
 
-	fprintf(stderr, "erresc: unknown str ");
-	strdump();
+	if (!disable_errmsg) {
+		fprintf(stderr, "erresc: unknown str ");
+		strdump();
+	}
 }
 
 void
@@ -2491,8 +2510,10 @@ eschandle(uchar ascii)
 			strhandle();
 		break;
 	default:
-		fprintf(stderr, "erresc: unknown sequence ESC 0x%02X '%c'\n",
-			(uchar) ascii, isprint(ascii)? ascii:'.');
+		if (!disable_errmsg) {
+			fprintf(stderr, "erresc: unknown sequence ESC 0x%02X '%c'\n",
+				(uchar) ascii, isprint(ascii)? ascii:'.');
+		}
 		break;
 	}
 	return 1;

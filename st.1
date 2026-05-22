@@ -3,7 +3,7 @@
 st \- simple terminal
 .SH SYNOPSIS
 .B st
-.RB [ \-aiv ]
+.RB [ \-adiv ]
 .RB [ \-c
 .IR class ]
 .RB [ \-f
@@ -27,7 +27,7 @@ st \- simple terminal
 .RI [ arguments ...]]
 .PP
 .B st
-.RB [ \-aiv ]
+.RB [ \-adiv ]
 .RB [ \-c
 .IR class ]
 .RB [ \-f
@@ -57,6 +57,9 @@ disable alternate screens in terminal
 .TP
 .BI \-c " class"
 defines the window class (default $TERM).
+.TP
+.B \-d
+enable debug messages for erresc
 .TP
 .BI \-f " font"
 defines the

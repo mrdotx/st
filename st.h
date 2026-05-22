@@ -138,6 +138,7 @@ extern char *utmp;
 extern char *scroll;
 extern char *stty_args;
 extern char *vtiden;
+extern int disable_errmsg;
 extern wchar_t *worddelimiters;
 extern int allowaltscreen;
 extern int allowwindowops;

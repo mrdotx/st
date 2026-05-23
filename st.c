@@ -40,14 +40,14 @@
 #define HISTSIZE      2000
 
 /* macros */
-#define IS_SET(flag)		((term.mode & (flag)) != 0)
-#define ISCONTROLC0(c)		(BETWEEN(c, 0, 0x1f) || (c) == 0x7f)
-#define ISCONTROLC1(c)		(BETWEEN(c, 0x80, 0x9f))
-#define ISCONTROL(c)		(ISCONTROLC0(c) || ISCONTROLC1(c))
-#define ISDELIM(u)		(u && wcschr(worddelimiters, u))
-#define TLINE(y)		((y) < term.scr ? term.hist[((y) + term.histi - \
-                    term.scr + HISTSIZE + 1) % HISTSIZE] : \
-                    term.line[(y) - term.scr])
+#define IS_SET(flag)    ((term.mode & (flag)) != 0)
+#define ISCONTROLC0(c)  (BETWEEN(c, 0, 0x1f) || (c) == 0x7f)
+#define ISCONTROLC1(c)  (BETWEEN(c, 0x80, 0x9f))
+#define ISCONTROL(c)    (ISCONTROLC0(c) || ISCONTROLC1(c))
+#define ISDELIM(u)      (u && wcschr(worddelimiters, u))
+#define TLINE(y)        ((y) < term.scr ? term.hist[((y) + term.histi - \
+						term.scr + HISTSIZE + 1) % HISTSIZE] : \
+						term.line[(y) - term.scr])
 
 enum term_mode {
 	MODE_WRAP        = 1 << 0,
@@ -161,6 +161,11 @@ typedef struct {
 	int narg;              /* nb of args */
 } STREscape;
 
+typedef struct {
+	int state;
+	size_t length;
+} URLdfa;
+
 static void execsh(char *, char **);
 static void stty(char **);
 static void sigchld(int);
@@ -210,8 +215,7 @@ static void tdefutf8(char);
 static int32_t tdefcolor(const int *, int *, int);
 static void tdeftran(char);
 static void tstrsequence(uchar);
-static void tsetcolor(int, int, int, uint32_t, uint32_t);
-static char * findlastany(char *, const char**, size_t);
+static int daddch(URLdfa *, char);
 
 static void drawregion(int, int, int, int);
 
@@ -250,24 +254,24 @@ struct timespec sutv;
 static void
 tsync_begin()
 {
-    clock_gettime(CLOCK_MONOTONIC, &sutv);
-    su = 1;
+	clock_gettime(CLOCK_MONOTONIC, &sutv);
+	su = 1;
 }
 
 static void
 tsync_end()
 {
-    su = 0;
+	su = 0;
 }
 
 int
 tinsync(uint timeout)
 {
-    struct timespec now;
-    if (su && !clock_gettime(CLOCK_MONOTONIC, &now)
-           && TIMEDIFF(now, sutv) >= timeout)
-        su = 0;
-    return su;
+	struct timespec now;
+	if (su && !clock_gettime(CLOCK_MONOTONIC, &now)
+		   && TIMEDIFF(now, sutv) >= timeout)
+		su = 0;
+	return su;
 }
 
 ssize_t
@@ -539,11 +543,11 @@ selected(int x, int y)
 
 	if (sel.type == SEL_RECTANGULAR)
 		return BETWEEN(y, sel.nb.y, sel.ne.y)
-		    && BETWEEN(x, sel.nb.x, sel.ne.x);
+			&& BETWEEN(x, sel.nb.x, sel.ne.x);
 
 	return BETWEEN(y, sel.nb.y, sel.ne.y)
-	    && (y != sel.nb.y || x >= sel.nb.x)
-	    && (y != sel.ne.y || x <= sel.ne.x);
+		&& (y != sel.nb.y || x >= sel.nb.x)
+		&& (y != sel.ne.y || x <= sel.ne.x);
 }
 
 void
@@ -667,7 +671,7 @@ getsel(void)
 		 * FIXME: Fix the computer world.
 		 */
 		if ((y < sel.ne.y || lastx >= linelen) &&
-		    (!(last->mode & ATTR_WRAP) || sel.type == SEL_RECTANGULAR))
+			(!(last->mode & ATTR_WRAP) || sel.type == SEL_RECTANGULAR))
 			*ptr++ = '\n';
 	}
 	*ptr = 0;
@@ -808,7 +812,7 @@ ttynew(const char *line, char *cmd, const char *out, char **args)
 	if (line) {
 		if ((cmdfd = open(line, O_RDWR)) < 0)
 			die("open line '%s' failed: %s\n",
-			    line, strerror(errno));
+				line, strerror(errno));
 		dup2(cmdfd, 0);
 		stty(args);
 		return cmdfd;
@@ -1211,7 +1215,7 @@ selscroll(int orig, int n)
 		sel.ob.y += n;
 		sel.oe.y += n;
 		if (sel.ob.y < term.top || sel.ob.y > term.bot ||
-		    sel.oe.y < term.top || sel.oe.y > term.bot) {
+			sel.oe.y < term.top || sel.oe.y > term.bot) {
 			selclear();
 		} else {
 			selnormalize();
@@ -1307,7 +1311,7 @@ tsetchar(Rune u, const Glyph *attr, int x, int y)
 	 * The table is proudly stolen from rxvt.
 	 */
 	if (term.trantbl[term.charset] == CS_GRAPHIC0 &&
-	   BETWEEN(u, 0x41, 0x7e) && vt100_0[u - 0x41])
+		BETWEEN(u, 0x41, 0x7e) && vt100_0[u - 0x41])
 		utf8decode(vt100_0[u - 0x41], &u, UTF_SIZ);
 
 	if (term.line[y][x].mode & ATTR_WIDE) {
@@ -1677,13 +1681,13 @@ tsetmode(int priv, int set, const int *args, int narg)
 				break;
 			/* Not implemented mouse modes. See comments there. */
 			case 1001: /* mouse highlight mode; can hang the
-				      terminal by design when implemented. */
+						terminal by design when implemented. */
 			case 1005: /* UTF-8 mouse mode; will confuse
-				      applications not supporting UTF-8
-				      and luit. */
+						applications not supporting UTF-8
+						and luit. */
 			case 1015: /* urxvt mangled mouse mode; incompatible
-				      and can be mistaken for other control
-				      codes. */
+						and can be mistaken for other control
+						codes. */
 				break;
 			default:
 				if (!disable_errmsg)
@@ -1905,7 +1909,7 @@ csihandle(void)
 			break;
 		case 6: /* Report Cursor Position (CPR) "<row>;<column>R" */
 			len = snprintf(buf, sizeof(buf), "\033[%i;%iR",
-			               term.c.y+1, term.c.x+1);
+						   term.c.y+1, term.c.x+1);
 			ttywrite(buf, len, 0);
 			break;
 		default:
@@ -1991,11 +1995,11 @@ osc_color_response(int num, int index, int is_osc4)
 	}
 
 	n = snprintf(buf, sizeof buf, "\033]%s%d;rgb:%02x%02x/%02x%02x/%02x%02x\007",
-	             is_osc4 ? "4;" : "", num, r, r, g, g, b, b);
+				 is_osc4 ? "4;" : "", num, r, r, g, g, b, b);
 	if (n < 0 || n >= sizeof(buf)) {
 		fprintf(stderr, "error: %s while printing %s response\n",
-		        n < 0 ? "snprintf failed" : "truncation occurred",
-		        is_osc4 ? "osc4" : "osc");
+				n < 0 ? "snprintf failed" : "truncation occurred",
+				is_osc4 ? "osc4" : "osc");
 	} else {
 		ttywrite(buf, n, 1);
 	}
@@ -2722,7 +2726,7 @@ tresize(int col, int row)
 
 	if (col < 1 || row < 1) {
 		fprintf(stderr,
-		        "tresize: error resizing to %dx%d\n", col, row);
+				"tresize: error resizing to %dx%d\n", col, row);
 		return;
 	}
 
@@ -2855,123 +2859,99 @@ redraw(void)
 	draw();
 }
 
-void
-tsetcolor( int row, int start, int end, uint32_t fg, uint32_t bg )
+int
+daddch(URLdfa *dfa, char c)
 {
-	int i = start;
-	for( ; i < end; ++i )
-	{
-		term.line[row][i].fg = fg;
-		term.line[row][i].bg = bg;
-	}
-}
+	/* () and [] can appear in urls, but excluding them here will reduce false
+	 * positives when figuring out where a given url ends.
+	 */
+	static const char URLCHARS[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+		"abcdefghijklmnopqrstuvwxyz"
+		"0123456789-._~:/?#@!$&'*+,;=%";
+	static const char RPFX[] = "//:sptth";
 
-char *
-findlastany(char *str, const char** find, size_t len)
-{
-	char* found = NULL;
-	int i = 0;
-	for(found = str + strlen(str) - 1; found >= str; --found) {
-		for(i = 0; i < len; i++) {
-			if(strncmp(found, find[i], strlen(find[i])) == 0) {
-				return found;
-			}
-		}
+	if (!strchr(URLCHARS, c)) {
+		dfa->length = 0;
+		dfa->state = 0;
+
+		return 0;
 	}
 
-	return NULL;
+	dfa->length++;
+
+	if (dfa->state == 2 && c == '/') {
+		dfa->state = 0;
+	} else if (dfa->state == 3 && c == 'p') {
+		dfa->state++;
+	} else if (c != RPFX[dfa->state]) {
+		dfa->state = 0;
+		return 0;
+	}
+
+	if (dfa->state++ == 7) {
+		dfa->state = 0;
+		return 1;
+	}
+
+	return 0;
 }
 
 /*
 ** Select and copy the previous url on screen (do nothing if there's no url).
-**
-** FIXME: doesn't handle urls that span multiple lines; will need to add support
-**        for multiline "getsel()" first
 */
 void
 copyurl(const Arg *arg) {
-	/* () and [] can appear in urls, but excluding them here will reduce false
-	 * positives when figuring out where a given url ends.
-	 */
-	static char URLCHARS[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-		"abcdefghijklmnopqrstuvwxyz"
-		"0123456789-._~:/?#@!$&'*+,;=%";
-
-	static const char* URLSTRINGS[] = {"http://", "https://"};
-
-	/* remove highlighting from previous selection if any */
-	if(sel.ob.x >= 0 && sel.oe.x >= 0)
-		tsetcolor(sel.nb.y, sel.ob.x, sel.oe.x + 1, defaultfg, defaultbg);
-
-	int i = 0,
-		row = 0, /* row of current URL */
+	int row = 0, /* row of current URL */
 		col = 0, /* column of current URL start */
-		startrow = 0, /* row of last occurrence */
 		colend = 0, /* column of last occurrence */
 		passes = 0; /* how many rows have been scanned */
 
-	char *linestr = calloc(term.col+1, sizeof(Rune));
-	char *c = NULL,
+	const char *c = NULL,
 		 *match = NULL;
+	URLdfa dfa = { 0 };
 
 	row = (sel.ob.x >= 0 && sel.nb.y > 0) ? sel.nb.y : term.bot;
 	LIMIT(row, term.top, term.bot);
-	startrow = row;
 
 	colend = (sel.ob.x >= 0 && sel.nb.y > 0) ? sel.nb.x : term.col;
 	LIMIT(colend, 0, term.col);
 
 	/*
- 	** Scan from (term.bot,term.col) to (0,0) and find
+	** Scan from (term.row - 1,term.col - 1) to (0,0) and find
 	** next occurrance of a URL
 	*/
-	while(passes !=term.bot + 2) {
+	for (passes = 0; passes < term.row; passes++) {
 		/* Read in each column of every row until
- 		** we hit previous occurrence of URL
+		** we hit previous occurrence of URL
 		*/
-		for (col = 0, i = 0; col < colend; ++col,++i) {
-			linestr[i] = term.line[row][col].u;
-		}
-		linestr[term.col] = '\0';
+		for (col = colend; col--;)
+			if (daddch(&dfa, term.line[row][col].u < 128 ? term.line[row][col].u : ' '))
+				break;
 
-		if ((match = findlastany(linestr, URLSTRINGS,
-						sizeof(URLSTRINGS)/sizeof(URLSTRINGS[0]))))
+		if (col >= 0)
 			break;
 
-		if (--row < term.top)
-			row = term.bot;
+		/* .i = 0 --> botton-up
+		 * .i = 1 --> top-down
+		 */
+		if (!arg->i) {
+			if (--row < 0)
+				row = term.row - 1;
+		} else {
+			if (++row >= term.row)
+				row = 0;
+		}
 
 		colend = term.col;
-		passes++;
-	};
+	}
 
-	if (match) {
-		/* must happen before trim */
-		selclear();
-		sel.ob.x = strlen(linestr) - strlen(match);
-
-		/* trim the rest of the line from the url match */
-		for (c = match; *c != '\0'; ++c)
-			if (!strchr(URLCHARS, *c)) {
-				*c = '\0';
-				break;
-			}
-
-		/* highlight selection by inverting terminal colors */
-		tsetcolor(row, sel.ob.x, sel.ob.x + strlen( match ), defaultbg, defaultfg);
-
-		/* select and copy */
-		sel.mode = 1;
-		sel.type = SEL_REGULAR;
-		sel.oe.x = sel.ob.x + strlen(match)-1;
-		sel.ob.y = sel.oe.y = row;
-		selnormalize();
-		tsetdirt(sel.nb.y, sel.ne.y);
+	if (passes < term.row) {
+		selstart(col, row, 0);
+		selextend((col + dfa.length - 1) % term.col, row + (col + dfa.length - 1) / term.col, SEL_REGULAR, 0);
+		selextend((col + dfa.length - 1) % term.col, row + (col + dfa.length - 1) / term.col, SEL_REGULAR, 1);
 		xsetsel(getsel());
 		xclipcopy();
 	}
-
-	free(linestr);
 }
 
 void set_notifmode(int type, KeySym ksym) {
@@ -3019,7 +2999,7 @@ void select_or_drawcursor(int selectsearch_mode, int type) {
 	}
 	else
 		xdrawcursor(term.c.x, term.c.y, term.line[term.c.y][term.c.x],
-			    term.ocx, term.ocy, term.line[term.ocy][term.ocx]);
+				term.ocx, term.ocy, term.line[term.ocy][term.ocx]);
 }
 
 void search(int selectsearch_mode, Rune *target, int ptarget, int incr, int type, TCursor *cu) {

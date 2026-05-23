@@ -16,7 +16,7 @@ the /usr/local namespace by default).
 Afterwards enter the following command to build and install st (if
 necessary as root):
 
-    make clean install
+	make clean install
 
 
 Running st
@@ -24,7 +24,7 @@ Running st
 If you did not install st with make clean install, you must compile
 the st terminfo entry with the following command:
 
-    tic -sx st.info
+	tic -sx st.info
 
 See the man page for additional details.
 
@@ -40,7 +40,7 @@ Patches
 -------
 st-alpha-0.8.5.diff
 st-font2-20190416-ba72400.diff
-st-copyurl-0.8.4.diff
+st-copyurl-multiline-20230406-211964d.diff
 st-openclipboard-20190202-3be4cf1.diff
 st-appsync-20200618-b27a383.diff
 st-xresources-20200604-9ba7ecf.diff

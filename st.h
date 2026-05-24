@@ -13,7 +13,7 @@
 #define LIMIT(x, a, b)      (x) = (x) < (a) ? (a) : (x) > (b) ? (b) : (x)
 #define ATTRCMP(a, b)       ((a).mode != (b).mode || (a).fg != (b).fg || \
 							(a).bg != (b).bg)
-#define TIMEDIFF(t1, t2)	((t1.tv_sec-t2.tv_sec)*1000 + \
+#define TIMEDIFF(t1, t2)    ((t1.tv_sec-t2.tv_sec)*1000 + \
 							(t1.tv_nsec-t2.tv_nsec)/1E6)
 #define MODBIT(x, set, bit) ((set) ? ((x) |= (bit)) : ((x) &= ~(bit)))
 
@@ -89,8 +89,6 @@ void redraw(void);
 void draw(void);
 
 void opencopied(const Arg *);
-void kscrolldown(const Arg *);
-void kscrollup(const Arg *);
 void printscreen(const Arg *);
 void printsel(const Arg *);
 void sendbreak(const Arg *);
@@ -139,6 +137,7 @@ extern char *scroll;
 extern char *stty_args;
 extern char *vtiden;
 extern int disable_errmsg;
+extern const int scrollback_lines;
 extern wchar_t *worddelimiters;
 extern int allowaltscreen;
 extern int allowwindowops;

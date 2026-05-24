@@ -275,8 +275,8 @@ static Shortcut shortcuts[] = {
 	{ MODKEY,               XK_y,           copyurl,        {.i =  0} },
 	{ MODKEY|ShiftMask,     XK_Y,           copyurl,        {.i =  1} },
 	{ MODKEY,               XK_o,           opencopied,     {.v = "link_handler.sh"} },
-	{ ShiftMask,            XK_Page_Up,     kscrollup,      {.i = -1} },
-	{ ShiftMask,            XK_Page_Down,   kscrolldown,    {.i = -1} },
+	{ ShiftMask,            XK_Page_Up,     kscrollup,      {.i =  5} },
+	{ ShiftMask,            XK_Page_Down,   kscrolldown,    {.i =  5} },
 	{ TERMMOD,              XK_Escape,      keyboard_select,{.i =  0} },
 };
 

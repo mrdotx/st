@@ -44,9 +44,9 @@ st-copyurl-multiline-20230406-211964d.diff
 st-openclipboard-20190202-3be4cf1.diff
 st-appsync-20200618-b27a383.diff
 st-xresources-20200604-9ba7ecf.diff
-st-scrollback-20210507-4536f46.diff
-st-scrollback-mouse-20191024-a2c479c.diff
-st-scrollback-mouse-altscreen-20200416-5703aa0.diff
+st-scrollback-ringbuffer-0.9.2.diff
+st-scrollback-mouse-0.9.2.diff
+st-scrollback-mouse-altscreen-20220127-2c5edf2.diff
 st-w3m-0.8.3.diff
 st-keyboard_select-20200617-9ba7ecf.diff
 st-clipboard-0.8.3.diff

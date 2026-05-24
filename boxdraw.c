@@ -31,7 +31,7 @@ isboxdraw(Rune u)
 {
 	Rune block = u & ~0xff;
 	return (boxdraw && block == 0x2500 && boxdata[(uint8_t)u]) ||
-	       (boxdraw_braille && block == 0x2800);
+		   (boxdraw_braille && block == 0x2800);
 }
 
 /* the "index" is actually the entire shape data encoded as ushort */
@@ -47,7 +47,7 @@ boxdrawindex(const Glyph *g)
 
 void
 drawboxes(int x, int y, int cw, int ch, XftColor *fg, XftColor *bg,
-          const XftGlyphFontSpec *specs, int len)
+		  const XftGlyphFontSpec *specs, int len)
 {
 	for ( ; len-- > 0; x += cw, specs++)
 		drawbox(x, y, cw, ch, fg, bg, (ushort)specs->glyph);

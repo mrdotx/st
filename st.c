@@ -3080,16 +3080,17 @@ int trt_kbdselect(KeySym ksym, char *buf, int len) {
 	static char selectsearch_mode;
 	int i, bound, *xy;
 
-
 	if ( selectsearch_mode & 2 ) {
 		if ( ksym == XK_Return ) {
 			selectsearch_mode ^= 2;
 			set_notifmode(selectsearch_mode, -2);
-			if ( ksym == XK_Escape )    ptarget = 0;
+			if ( ksym == XK_Escape )
+				ptarget = 0;
 			return 0;
 		}
 		else if ( ksym == XK_BackSpace ) {
-			if ( !ptarget )     return 0;
+			if ( !ptarget )
+				return 0;
 			TLINE(term.bot)[ptarget--].u = ' ';
 		}
 		else if ( len < 1 ) {
@@ -3117,21 +3118,21 @@ int trt_kbdselect(KeySym ksym, char *buf, int len) {
 		cu.x = term.c.x, cu.y = term.c.y;
 		set_notifmode(0, ksym);
 		return MODE_KBDSELECT;
-	case XK_s :
+	case XK_v :
 		if ( selectsearch_mode & 1 )
 			selclear();
 		else
 			selstart(term.c.x, term.c.y, 0);
 		set_notifmode(selectsearch_mode ^= 1, ksym);
 		break;
-	case XK_t :
-		selextend(term.c.x, term.c.y, type ^= 3, i = 0);  /* 2 fois */
+	case XK_V :
+		selextend(term.c.x, term.c.y, type ^= 3, i = 0); /* 2 fois */
 		selextend(term.c.x, term.c.y, type, i = 0);
 		break;
 	case XK_slash :
 	case XK_KP_Divide :
 	case XK_question :
-		ksym &= XK_question;                /* Divide to slash */
+		ksym &= XK_question;                             /* Divide to slash */
 		sens = (ksym == XK_slash) ? -1 : 1;
 		ptarget = 0;
 		set_notifmode(15, ksym);
@@ -3184,11 +3185,11 @@ int trt_kbdselect(KeySym ksym, char *buf, int len) {
 		select_or_drawcursor(selectsearch_mode, type);
 		break;
 	default :
-		if ( ksym >= XK_0 && ksym <= XK_9 ) {               /* 0-9 keyboard */
+		if ( ksym >= XK_0 && ksym <= XK_9 ) {            /* 0-9 keyboard */
 			quant = (quant * 10) + (ksym ^ XK_0);
 			return 0;
 		}
-		else if ( ksym >= XK_KP_0 && ksym <= XK_KP_9 ) {    /* 0-9 numpad */
+		else if ( ksym >= XK_KP_0 && ksym <= XK_KP_9 ) { /* 0-9 numpad */
 			quant = (quant * 10) + (ksym ^ XK_KP_0);
 			return 0;
 		}

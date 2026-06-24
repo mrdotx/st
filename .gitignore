@@ -1,7 +1,7 @@
-# path:   /home/klassiker/.local/share/repos/st/.gitignore
+# path:   /home/klassiker/Projects/repos/st/.gitignore
 # author: klassiker [mrdotx]
 # url:    https://github.com/mrdotx/st
-# date:   2025-08-10T04:41:50+0200
+# date:   2026-06-24T03:44:34+0200
 
 /boxdraw.o
 /config.h

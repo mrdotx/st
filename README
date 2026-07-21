@@ -55,4 +55,4 @@ st-glyph-wide-support-boxdraw-20220411-ef05519.diff
 
 Last implemented commit
 -----------------------
-2026-01-15 05:00	st: guard tsetdirt() against zero-sized terminal	Milos Nikic
+2026-06-29 14:26	fix async-unsafe error paths in sigchld()	Avro

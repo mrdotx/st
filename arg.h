@@ -29,7 +29,6 @@ extern char *argv0;
 						break;\
 					argc_ = argv[0][i_];\
 					switch (argc_)
-
 #define ARGEND			}\
 			}
 

@@ -55,4 +55,4 @@ st-glyph-wide-support-boxdraw-20220411-ef05519.diff
 
 Last implemented commit
 -----------------------
-2026-06-29 14:26	fix async-unsafe error paths in sigchld()	Avro
+2026-10-16 11:14	config.def.h: add a comment to prevent a user config error	Hiltjo Posthuma

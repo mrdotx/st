@@ -1354,10 +1354,11 @@ tsetchar(Rune u, const Glyph *attr, int x, int y)
 			line[x+1].mode &= ~ATTR_WDUMMY;
 		}
 	} else if (line[x].mode & ATTR_WDUMMY) {
-		line[x-1].u = ' ';
-		line[x-1].mode &= ~ATTR_WIDE;
+		if (x > 0) {
+			line[x-1].u = ' ';
+			line[x-1].mode &= ~ATTR_WIDE;
+		}
 	}
-
 	term.dirty[y] = 1;
 	line[x] = *attr;
 	line[x].u = u;
@@ -2889,9 +2890,9 @@ draw(void)
 	/* adjust cursor position */
 	LIMIT(term.ocx, 0, term.col-1);
 	LIMIT(term.ocy, 0, term.row-1);
-	if (TLINE(term.ocy)[term.ocx].mode & ATTR_WDUMMY)
+	if (term.ocx > 0 && (TLINE(term.ocy)[term.ocx].mode & ATTR_WDUMMY))
 		term.ocx--;
-	if (TLINE(term.c.y)[cx].mode & ATTR_WDUMMY)
+	if (cx > 0 && (TLINE(term.c.y)[cx].mode & ATTR_WDUMMY))
 		cx--;
 
 	drawregion(0, 0, term.col, term.row);
